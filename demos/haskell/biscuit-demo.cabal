@@ -1,0 +1,46 @@
+cabal-version: 2.0
+
+name:           biscuit-demo
+version:        0.3.0.0
+category:       Security
+synopsis:       Demo for biscuit
+description:    Please see the README on GitHub at <https://github.com/biscuit-auth/biscuit-haskell#readme>
+homepage:       https://github.com/biscuit-auth/biscuit-haskell#readme
+bug-reports:    https://github.com/biscuit-auth/biscuit-haskell/issues
+author:         Clément Delafargue
+maintainer:     clement@delafargue.name
+copyright:      2021 Clément Delafargue
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+tested-with:    GHC ==9.2.4
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/biscuit-auth/biscuit-haskell
+
+executable biscuit-demo
+  hs-source-dirs: src
+  main-is: Main.hs
+  default-language: GHC2021
+  default-extensions: NoImplicitPrelude
+  build-depends:
+    base >= 4.7 && <5,
+    base64 ^>= 0.4,
+    biscuit-haskell ^>= 0.3,
+    biscuit-servant ^>= 0.3,
+    directory ^>= 1.3,
+    http-media ^>= 0.8,
+    mtl ^>= 2.2.2,
+    random ^>= 1.2,
+    relude ^>= 1.1,
+    servant ^>= 0.19,
+    servant-server ^>= 0.19,
+    time ^>= 1.9,
+    wai ^>= 3.2,
+    warp ^>= 3.3
+  other-modules:
+    Picture
