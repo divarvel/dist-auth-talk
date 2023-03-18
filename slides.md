@@ -1,0 +1,91 @@
+---
+title: "Auth & systèmes distribués : ne jetons pas le bébé avec l’eau du bain"
+#light: true
+#ratio43: true
+overlay: "@clementd / @gcouprie"
+author:
+  - name: Clément Delafargue
+    desc:
+      - Software developer at <a href="https://outscale.com">3DS Outscale</a>
+      - <a href="https://framapiaf.org/clementd">@clementd</a>
+  - name: Geoffroy Couprie
+    desc:
+      - Apollo GraphQL
+      - "@geal@mastodon.social"
+---
+
+# Plan
+
+- comment choisir entre un système d'auth centralisé et un système distribué
+- un tour d'horizon des solutions possibles pour les jetons au porteur;
+- les différentes architectures d'auth possibles (passerelle d'auth, intégration directe, …);
+- les éléments indispensables à mettre en place dans un tel système (rafraichissement des tokens, révocation, rotation des clés, …);
+- la plateforme biscuit, construite autours de ces use cases.
+
+---
+
+# Centered title
+
+---
+
+# Centered title even when it's long and spans multiple lines
+
+---
+
+# Centered [[incremental]{}]{.incremental} title
+
+---
+
+# Top title
+
+- With
+- content
+
+---
+
+# Top title
+
+::: incremental
+- a
+- b
+- c
+:::
+
+---
+
+# [Jumbo text]{.jumbo}
+
+---
+
+::: jumbogroup
+
+## [a group of]{.jumbo}
+## [big jumbo text]{.jumbo}
+## [because it's fun]{.jumbo}
+
+::::::::::
+
+---
+
+```haskell
+test :: Test
+test = do
+  traverse (`xor` b) [test]
+  
+```
+
+---
+
+# Title that should be centered but is not because of notes
+
+::: notes
+| notes that are displayed because the right flag is added to the pandoc
+| invocation. The leading `|` character allows to preserve line breaks,
+| that's convenient in notes
+:::
+
+---
+
+:::bigimage
+![](./assets/puna.jpg)
+:::
