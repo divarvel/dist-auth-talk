@@ -17,18 +17,65 @@ author:
 # What is auth?
 
 ::: notes
-| authentication: who are you?
-| authorization: what can you do?
-| often authentication then authorization, but not necessarily
+| overloaded term. gathers two concepts
 :::
 
 ---
 
-# Distributed systems
+<div style="display: flex;">
+  <div style="flex-grow: 1; text-align: center;"><h2>Authentication</h2></div>
+  <div style="flex-grow: 1; text-align: center;"><h2>Authorization</h2></div>
+</div>
+
+---
+
+<div style="display: flex;">
+  <div style="flex-grow: 1; text-align: center;"><h2>Authn</h2></div>
+  <div style="flex-grow: 1; text-align: center;"><h2>Authz</h2></div>
+</div>
 
 ::: notes
-| several nodes, network communications: failure happens
-| goals: resiliency, scaling out
+| authentication: who are you?
+| authorization: what can you do?
+:::
+
+---
+
+# Distributed systems [[but why?]{}]{.incremental}
+
+:::incremental
+- tolerate hardware failures
+- increase capacity
+- decouple lifecycles
+- compartimentalize trust
+:::
+
+::: notes
+| a distributed system is about running different bits of software
+| on different pieces of hardware. The goal is to create boundaries
+| to compartimentalize stuff (hardware failures, resource use,
+| teams management, blast radius of a bug / vuln)
+:::
+
+---
+
+# Distributed systems: tradeoffs
+
+::: incremental
+- new failure modes
+- latency (network calls)
+- latency (stale data)
+- blind spots (your data is in another castle)
+:::
+
+::: notes
+| the biggest traedoff is that turning local calls into network
+| calls creates tons of new failure modes, + performance considerations
+| when aggregating data,  that you have to account for.
+| compartimentalization is also a drawback: a central data model is very
+| convenient. moving away from that makes things harder:
+| either the data is replicated from somewhere and possibly out of date
+| or it is just not available locally
 :::
 
 ---
@@ -36,8 +83,40 @@ author:
 # Monolith, [[fewer problems]{}]{.incremental}
 
 ::: notes
-| everything happens in a single place, auth checks happen locally
-| the main issue becomes expressing auth rules
+| if you can afford a monolith (tolerate hardware failure,
+| team coupling, etc), then all sorts of problems disappear
+:::
+
+---
+
+# Now you can leave
+
+::: notes
+| for the rest of the talk we will assume that we are in the context
+| where a distributed system is required (for whatever reason)
+:::
+
+---
+
+# Auth in a distributed system
+
+::: notes
+| authorization is a cross-cutting concern. in most cases each entity
+| will have to perform authorization on incoming requests.
+| it's also often something that you somehow want to manage centrally.
+| chasing access rules across a distributed architecture is a nightmare
+:::
+
+---
+
+# It's a spectrum
+
+::: notes
+| the good thing is that you can choose where you apply decentralization
+| what's important is staying aware of the dependencies between services
+| and the actual call graph triggered by an incoming request. it will
+| give you a good idea of possible failure modes and of the actual
+| cost of tradeoffs
 :::
 
 ---
