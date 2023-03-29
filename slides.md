@@ -288,6 +288,23 @@ author:
 
 ---
 
+# Key rotation
+
+- plan from day 1
+- perform regular rotations
+- forbids eternal tokens
+
+::: notes
+| same as for revocation, this has to be planned from day 1 because
+| once you need it, you have to be fast.
+| the best way to be prepared is to rotate keys regularly and make
+| sure nothing breaks.
+| rotating keys mandates that every token has an expiration date, so
+| that you can retire keys without breaking anything
+:::
+
+---
+
 # Distributed auth patterns
 
 ::: notes
