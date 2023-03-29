@@ -263,12 +263,173 @@ author:
 
 ---
 
+# Principle of least privilege
+
+::: incremental
+- static identity-based authorization rules
+- deliver single-use tokens on demand
+- dedicated execution roles
+- perf / latency tradeoff
+:::
+
+::: notes
+| even with revocation in place, there is still latency. so reducing
+| the blast radius during that vuln window is always a good thing.
+| of course you want people to have access to what they need, so 
+| identity-based rules tend to be static.
+| however, if you can deliver tokens crafted specially for the
+| operations you're trying to carry out, you avoid a lot of issues
+| another example is AWS execution roles you can define for lambdas
+| where each lambda gets dedicated credentials that are only valid
+| for the execution duration
+| it's not always feasible though, especially with central auth
+| systems where creating new roles takes time (eg AWS)
+:::
+
+---
+
 # Distributed auth patterns
 
-- auth gateway
-- chained calls with service-level restrictions
-- token delivery service + capability-based tokens
-- offline attenuation
+::: notes
+| now for some patterns. there are various ways to implement
+| distributed auth. often you'll still require a bit of
+| centralization. the question is how / where you do that and
+| how much it affects other services
+:::
+
+---
+
+# Auth gateway
+
+## ToDo diagram?
+
+::: notes
+| you usually already have an ingress where all incoming traffic
+| is directed. so if you already have a spof, you can make it
+| handle auth concerns without creating a new one.
+| it is a very interesting pattern where a single incoming request
+| can trigger several internal cross-service requests: the auth
+| exposed to the outside can be completely separate from what's
+| used between services internally. eg a stateful session exposed
+| to users, and different mechanisms internally (eg trusted network,
+| or bearer tokens)
+:::
+
+---
+
+# Auth gateway: challenges
+
+- more complexity at ingress
+- usually about authn; what about authz?
+- usually coarse-grained
+
+::: notes
+| makes the ingress logic more complicated, so it can affect its
+| robustness.
+| just half the story: how are internal calls authorized? does the
+| gateway need to know about every service internals so it can
+| perform authorization. in practice this nudges into very coarse
+| grained authz rules: rules that the gateway can check itself
+| without too much knowledge of service internals.
+| it's still a great solution for authentication if you let 
+| services themselves perform authorization
+:::
+
+---
+
+# Internal calls with service-level restrictions
+
+
+::: notes
+| can be combined with an auth gateway
+| static restrictions per service. better than a trusted network
+:::
+
+---
+
+# Internal calls with service-level restrictions: challenges
+
+::: incremental
+- confused deputy attacks
+- no tenant isolation
+:::
+
+
+::: notes
+| services can still be tricked into performing operations that
+| they can do in theory but should be forbidden in a given
+| context.
+| especially in multi-tenant system, the service-level restrictions
+| don't prevent a tenant from accessing data from another tenant
+:::
+
+---
+
+# Internal calls with request-level restrictions
+
+
+::: notes
+| the first service requires a token provided by the auth gateway
+| and then passes it to subsequent calls. each service uses this
+| token to perform auth.
+| we get back request scoping and tenant isolation
+:::
+
+---
+
+# Internal calls with offline attenuation
+
+
+::: notes
+| same as before, but each service attenuates the token before
+| passing it further. this way, even if a service is compromised,
+| only dedicated tokens are leaked, so the blast radius is limited
+| only feasible with offline attenuation, since it doesn't require
+| crafting new credentials / roles. this can be done at a
+| per-request/per-service level.
+:::
+
+---
+
+# Token delivery service
+
+::: incremental
+- no need for an auth gateway
+- central authn service out of the hot path
+- direct service access
+- great for developer tooling
+:::
+
+::: notes
+| this one is interesting if you can directly expose services
+| the user logs in at the token service, and gets access tokens
+| they can use to access services directly. i used it at fretlink
+| and it was super robust.
+| as a bonus it was great for developers as it also provided a web
+| ui to manually generate tokens (useful for admin operations for
+| instance)
+:::
+
+---
+
+# Token delivery service: challenges
+
+::: incremental
+- direct service access
+- per-service tokens
+- cross-service tokens
+- still requires service-specific access rules modeling
+:::
+
+::: notes
+| it added a bit of complexity because
+| we had per-service tokens, but that could be avoided with biscuits
+| a cross-service token requires some thought so that service-specific
+| info doesn't conflict / doesn't get wrongfully interpreted by another
+| service
+| same as the auth gateway, a central source of truth requires a
+| common auth model. this can be limiting.
+:::
 
 ---
 
