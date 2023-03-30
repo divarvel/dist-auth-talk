@@ -458,6 +458,29 @@ request          │ 1  ├────▼┐
 
 # Token delivery service
 
+<pre style="margin-left: auto; margin-right: auto;">
+┌────┐ auth data    ┌────────┐
+│user├─────────────►│token   │
+│    │              │delivery│
+├──┬─┘◄─────────────┤service │
+│  │    token(s)    └────────┘
+│  │
+│  │
+│  │                  ┌───────┐
+│  └─────────────────►│service│
+│                     │  1    │
+│                     └───────┘
+│
+│                     ┌───────┐
+└─────────────────────┤service│
+                      │  2    │
+                      └───────┘
+</pre>
+
+---
+
+# Token delivery service
+
 ::: incremental
 - no need for an auth gateway
 - central authn service out of the hot path
