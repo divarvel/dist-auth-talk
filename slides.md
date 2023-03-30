@@ -195,7 +195,104 @@ author:
 
 ---
 
-# TODO biscuit examples
+# Biscuit
+
+::: incremental
+- spec + implementations
+:::
+
+::: incremental
+- token format (crypto)
+- token format (payload)
+- authorization rules (semantics)
+:::
+
+::: incremental
+- public key crypto (ed25519)
+- offline attenuation
+:::
+
+::: notes
+| biscuit is a spec, it defines both a token format (crypto and payload), as
+| well as a dedicated language used to describe authorization rules.
+| several implementations are available (rust + wasm derivatives, haskell, java, go, etc)
+| the token itself relies on ed25519 signatures, so it works with keypairs
+| a token contains an authority block, signed by the token emitter, but it can
+| also contain *attenuation blocks*, that can be *freely* added to a token
+| (ie without needing the signing key). such blocks can only restrict a token
+| scope
+:::
+
+---
+
+# Biscuit: token
+
+```biscuit-datalog
+// token payload: data
+user("beb9bf91-4dfb-4bbb-be83-940864724008");
+// token payload: auth rules
+check if time($time), $time < 2023-03-31T00:10:46Z;
+```
+
+```
+EsUBClsKJGJlYjliZjkxLTRkZmItNGJiYi1iZTgzLTk0MDg2NDcyNDAwOBgDIgkKBwgKEgMYgAgyJgok
+CgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIbKmKEGCgQaAggAEiQIABIglxFlJnk5NxQluiM2rKlUgZGw
+jUF64-bwhaTOCq3JcooaQPTn4mky1je8bJgf2KRCKa8mX11b4hE110Pa48qd6iPbEzzZcV6o51eTCCz4
+bh2BXPDhR9_7ZKCGSByb37pIzAkiIgogOLbyK34IreFp76u96usfcb2GS1U-y2T7GY7zIp0RJSM=
+```
+::: notes
+| here is an example of a token. it contains a regular payload, but also
+| auth rules. the token itself can carry auth logic, and it's crucial in some
+| architectures. auth logic in a token is purely restrictive: it can only deny
+| access by failing, but is not enough in itself
+| the token itself is serialized as a binary blob through protobuf and is usually
+| base64 encoded when sent over the wire
+:::
+
+---
+
+# Biscuit: auth rules
+
+```biscuit-datalog
+// context provided by the server
+time(2023-03-31T00:00:00Z);
+resource("file1");
+operation("read");
+
+// rules provided by the server
+right("beb9bf91-4dfb-4bbb-be83-940864724008", "file1", "read");
+allow if user($user),
+         resource($r), 
+         operation($op),
+         right($user, $r, $op);
+```
+
+::: notes
+| the token itself can carry rules, but ultimately it's up to the receiving
+| agent to decide whether or not to authorize. That is done with `allow if`
+| usually the receiving agent will provide context (what is the operation
+| that is currently attempted, on which resource, etc), more static rules
+| like ACLs or capabilities, and finally a condition for allowing requests.
+| the biscuit library then combines the token with the server policies, and
+| computes the result of authorization policies
+:::
+
+---
+
+# Biscuit: offline attenuation
+
+```biscuit-datalog
+// block appended by the token holder: the resulting token can only be used
+// locally
+check if source_ip("127.0.0.1");
+```
+
+::: notes
+| the biscuit crypto model allows a token holder to craft a new token by
+| appending a block to an existing one. once added, blocks can not be removed,
+| altered or reordered. The evaluation model guarantees that a block can only
+| restrict a token's scope
+:::
 
 ---
 
@@ -249,6 +346,21 @@ author:
 ---
 
 # Access token / refresh token
+
+<pre style="margin-left: auto; margin-right: auto;">
+┌───────┐ auth data         ┌────────────────┐
+│  user ├──────────────────▲│ token delivery │
+└─────┬─┘▼──────────────────┤    service     │
+   ▲  │    refresh token    └─────────┬──────┘
+   │  │     + access token        ▲   │
+   │  │                           │   │
+   │  │   refresh token           │   │
+   │  └───────────────────────────┘   │
+   │                                  │
+   └──────────────────────────────────┘
+          access token
+           + refresh token
+</pre>
 
 ::: notes
 | a good way to reduce tokens lifetime is to separate access tokens
@@ -521,6 +633,12 @@ request          │ 1  ├────▼┐
 
 ---
 
+# Thanks!
+
+<!--
+
+---
+
 # Plan
 
 - comment choisir entre un système d'auth centralisé et un système distribué
@@ -596,3 +714,5 @@ test = do
 :::bigimage
 ![](./assets/puna.jpg)
 :::
+
+-->
