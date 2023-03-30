@@ -318,7 +318,28 @@ author:
 
 # Auth gateway
 
-## ToDo diagram?
+<pre style="margin-left: auto; margin-right: auto;">
+            trusted network
+           ┌────────────────────────────────────┐
+           │                                    │
+           │                     services       │
+           │                      ┌───┐         │
+         ┌─┴┐      trusted        │   │  trusted│
+         │  ├─────────────────────► 1 ├─────┐   │
+         │g │                     └───┘     │   │
+         │a │                               │   │
+untrusted│t │                     ┌───┐     │   │
+────────►│e │      trusted        │   │     │   │
+         │w ├─────────────────────► 2 │◄────┘   │
+         │a │                     └───┘         │
+         │y │                                   │
+         │  │                     ┌───┐         │
+         │  │      trusted        │   │         │
+         │  ├─────────────────────► 3 │         │
+         └─┬┘                     └───┘         │
+           │                                    │
+           └────────────────────────────────────┘
+</pre>
 
 ::: notes
 | you usually already have an ingress where all incoming traffic
@@ -358,6 +379,19 @@ author:
 
 # Internal calls with service-level restrictions
 
+<pre style="margin-left: auto; margin-right: auto;">
+                 services
+incoming         ┌────┐
+────────────────►│    │
+request          │ 1  ├─────┐
+                 └────┘     │
+                            │ authorized
+                 ┌────┐     │ as service 1
+                 │    │     │
+                 │ 2  │◄────┘
+                 └────┘
+</pre>
+
 ::: notes
 | can be combined with an auth gateway
 | static restrictions per service. better than a trusted network
@@ -383,6 +417,22 @@ author:
 ---
 
 # Internal calls with request-level restrictions
+
+<pre style="margin-left: auto; margin-right: auto;">
+              incoming credentials
+             ┌─────────────┐
+             │             │
+             │   services  │
+incoming     │   ┌────┐    │
+─────────────┴──►│    │    │
+request          │ 1  ├────▼┐
+                 └────┘     │
+                            │ authorized
+                 ┌────┐     │ as incoming
+                 │    │     │    request
+                 │ 2  │◄────┘
+                 └────┘
+</pre>
 
 ::: notes
 | the first service requires a token provided by the auth gateway
