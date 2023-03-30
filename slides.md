@@ -336,9 +336,11 @@ author:
 
 # Auth gateway: challenges
 
+::: incremental
 - more complexity at ingress
 - usually about authn; what about authz?
 - usually coarse-grained
+:::
 
 ::: notes
 | makes the ingress logic more complicated, so it can affect its
@@ -356,7 +358,6 @@ author:
 
 # Internal calls with service-level restrictions
 
-
 ::: notes
 | can be combined with an auth gateway
 | static restrictions per service. better than a trusted network
@@ -371,7 +372,6 @@ author:
 - no tenant isolation
 :::
 
-
 ::: notes
 | services can still be tricked into performing operations that
 | they can do in theory but should be forbidden in a given
@@ -384,7 +384,6 @@ author:
 
 # Internal calls with request-level restrictions
 
-
 ::: notes
 | the first service requires a token provided by the auth gateway
 | and then passes it to subsequent calls. each service uses this
@@ -395,7 +394,6 @@ author:
 ---
 
 # Internal calls with offline attenuation
-
 
 ::: notes
 | same as before, but each service attenuates the token before
