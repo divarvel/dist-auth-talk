@@ -127,6 +127,11 @@ $dzslides-core$
     flex-direction: column;
   }
 
+  .slide.alternate, .slide:has(.make-alternate) {
+    color: var(--primary);
+    background-color: var(--secondary);
+  }
+
   /* Display the first slide element on top */
   .slide>*:first-child {
     margin-top: 1rem;

@@ -1,5 +1,6 @@
 ---
 title: "Auth & systèmes distribués : ne jetons pas le bébé avec l’eau du bain"
+#display-notes: true
 #light: true
 #ratio43: true
 overlay: "@clementd / @gcouprie"
@@ -43,37 +44,88 @@ author:
 
 ---
 
-# Distributed systems [[but why?]{}]{.incremental}
-
-:::incremental
-- tolerate hardware failures
-- increase capacity
-- decouple lifecycles
-- compartimentalize trust
-:::
+# Distributed systems
 
 ::: notes
 | a distributed system is about running different bits of software
-| on different pieces of hardware. The goal is to create boundaries
+| on different pieces of hardware.
+:::
+
+---
+
+:::bigimage
+![](./assets/but-why.gif)
+:::
+
+---
+
+# [compartimentalize]{.jumbo}
+
+::: notes
+| The goal is to create boundaries
 | to compartimentalize stuff (hardware failures, resource use,
 | teams management, blast radius of a bug / vuln)
 :::
 
 ---
 
-# Distributed systems: tradeoffs
+# hardware failure
 
-::: incremental
-- new failure modes
-- latency (network calls)
-- latency (stale data)
-- blind spots (your data is in another castle)
-:::
+---
+
+# [compartimentalize]{.jumbo}
+
+---
+
+# resource use
+
+---
+
+# [compartimentalize]{.jumbo}
+
+---
+
+# trust scopes
+
+---
+
+# [compartimentalize]{.jumbo}
+
+---
+
+# teams
+
+---
+
+# [compartimentalize]{.jumbo}
+
+---
+
+# Tradeoffs
+
+---
+
+# new failure modes
 
 ::: notes
-| the biggest traedoff is that turning local calls into network
-| calls creates tons of new failure modes, + performance considerations
+| the biggest tradeoff is that turning local calls into network
+| calls creates tons of new failure modes, 
+:::
+
+---
+
+# latency (network calls)
+
+::: notes
+| + performance considerations
 | when aggregating data,  that you have to account for.
+:::
+
+---
+
+# data fragmentation
+
+::: notes
 | compartimentalization is also a drawback: a central data model is very
 | convenient. moving away from that makes things harder:
 | either the data is replicated from somewhere and possibly out of date
@@ -84,6 +136,12 @@ author:
 
 # Monolith, [[fewer problems]{}]{.incremental}
 
+---
+
+:::bigimage
+![](./assets/2001.gif)
+:::
+
 ::: notes
 | if you can afford a monolith (tolerate hardware failure,
 | team coupling, etc), then all sorts of problems disappear
@@ -91,7 +149,7 @@ author:
 
 ---
 
-# Now you can leave, bye!
+# kthxbai
 
 ::: notes
 | for the rest of the talk we will assume that we are in the context
@@ -111,7 +169,14 @@ author:
 
 ---
 
-# It's a spectrum
+# [Don't panic]{.jumbo}
+
+---
+
+:::bigimage
+![](./assets/dsotm.jpeg)
+:::
+
 
 ::: notes
 | the good thing is that you can choose where you apply decentralization
@@ -125,6 +190,18 @@ author:
 
 # Centralized auth in a distributed system
 
+---
+
+# Distributed auth in a distributed system
+
+---
+
+<h1 style="z-index: 2; background-color: rgba(255,255,255, 0.3);">Centralized</h1>
+
+:::bigimage
+![](./assets/panopticon.jpg)
+:::
+
 ::: notes
 | every node calls out to the auth service.
 | conceptually simple, but the auth service is a SPOF
@@ -137,7 +214,11 @@ author:
 
 ---
 
-# Distributed auth in a distributed system
+<h1 style="z-index: 2; background-color: rgba(255,255,255, 0.3);">Decentralized</h1>
+
+:::bigimage
+![](./assets/darkest-timeline.webp)
+:::
 
 ::: notes
 | if you want truly autonomous nodes and an auth service spof is
@@ -146,49 +227,63 @@ author:
 
 ---
 
-# Distributed auth in a distributed system:<br>challenges
-
-:::incremental
-- distributed trust
-- stale auth info
-- incomplete data available locally
-- local caches of external information
-:::
+# challenges
 
 ::: notes
-| in this setup, there is no central auth system that you can query
-| for fresh information. you have to rely on bearer tokens, which
-| can become stale. You need to set up revocation to be able to 
-| stop accepting a token once it has been emitted.
-| in this setup, a service may carry enough information to make
-| auth decisions, so sometimes a cache of external context is required
-| this cache can become stale
+more frightening than centralized auth, even though it brings super interesting
+properties
 :::
 
 ---
 
-# Bearer tokens
+# distributed trust
+
+::: notes
+| in this setup, there is no central auth system that you can query
+| for fresh information. you have to rely on bearer tokens
+:::
+
+---
+
+# incomplete data
+
+::: notes
+| in this setup, a service may carry enough information to make
+| auth decisions, so sometimes a cache of external context is required
+:::
+
+---
+
+# stale data
+
+::: notes
+| this cache can become stale
+| bearer tokens themselves can become stale. need for revocation
+:::
+
+---
+
+# Bearer tokens (boring)
+
+- JWT (super common, can be tricky)
+- PASETO (JWT without the footguns)
+- Roll your own tokens
 
 ::: notes
 | Since services cannot call out to a central auth service, services need a way
 | to trust information. A common way to do that is signed tokens
+| JWT / PASETO / custom tokens: payload + signature. It's up to the services
+| to actually interpret it. Conventions in the JWT world with well-known claims
 :::
 
 ---
 
-# Bearer tokens
+# Bearer tokens (fancy)
 
-:::incremental
-- JWT (super common, can be tricky)
-- PASETO (JWT without the footguns)
-- Roll your own tokens
 - Macaroons
 - Biscuits
-:::
 
 ::: notes
-| JWT / PASETO / custom tokens: payload + signature. It's up to the services
-| to actually interpret it. Conventions in the JWT world with well-known claims
 | Macaroons: caveat system for describing constraints
 | Biscuits: embedded logic language for describing constraints & access rules
 :::
@@ -227,12 +322,15 @@ author:
 
 # Biscuit: token
 
+<!--
 ```biscuit-datalog
 // token payload: data
 user("beb9bf91-4dfb-4bbb-be83-940864724008");
 // token payload: auth rules
 check if time($time), $time < 2023-03-31T00:10:46Z;
 ```
+-->
+<img src="./assets/biscuit-payload.png" style="max-width: 100%" />
 
 ```
 EsUBClsKJGJlYjliZjkxLTRkZmItNGJiYi1iZTgzLTk0MDg2NDcyNDAwOBgDIgkKBwgKEgMYgAgyJgok
@@ -253,6 +351,7 @@ bh2BXPDhR9_7ZKCGSByb37pIzAkiIgogOLbyK34IreFp76u96usfcb2GS1U-y2T7GY7zIp0RJSM=
 
 # Biscuit: auth rules
 
+<!--
 ```biscuit-datalog
 // context provided by the server
 time(2023-03-31T00:00:00Z);
@@ -266,6 +365,8 @@ allow if user($user),
          operation($op),
          right($user, $r, $op);
 ```
+-->
+<img src="./assets/biscuit-rules.png" style="max-width: 100%" />
 
 ::: notes
 | the token itself can carry rules, but ultimately it's up to the receiving
@@ -281,11 +382,14 @@ allow if user($user),
 
 # Biscuit: offline attenuation
 
+<!--
 ```biscuit-datalog
-// block appended by the token holder: the resulting token can only be used
-// locally
+// block appended by the token holder: the resulting
+// token can only be used locally
 check if source_ip("127.0.0.1");
 ```
+-->
+<img src="./assets/biscuit-check.png" style="max-width: 100%" />
 
 ::: notes
 | the biscuit crypto model allows a token holder to craft a new token by
@@ -307,28 +411,11 @@ check if source_ip("127.0.0.1");
 
 ---
 
-# Token revocation
+# [revocation]{.jumbo}
 
 ::: notes
 | talking about token revocation could easily fill a 1h slot so we'll
 | have to summarize
-:::
-
----
-
-# Token revocation
-
-::: incremental
-- start with static lists from day 1
-- make sure tokens are unique / identifiable
-- keep track of emitted tokens
-- all tokens should have an expiration date
-- prune token list regularly
-:::
-
-::: notes
-| talking about token revocation could easily fill a 1h slot so we'll
-| have to summarize.
 | have a basic revocation infra available from day 1, even if it's
 | dumb. You'll thank yourself once you have to revoke a token.
 | make sure every token is uniquely identifiable so it can be revoked
@@ -342,6 +429,52 @@ check if source_ip("127.0.0.1");
 | token an expiration date, and then store this date in the emission
 | and revocation lists. this way, pruning is easy.
 :::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
+
+::: notes
+| have a basic revocation infra available from day 1, even if it's
+| dumb. You'll thank yourself once you have to revoke a token.
+| make sure every token is uniquely identifiable so it can be revoked
+| without affecting other holders.
+:::
+
+---
+
+# unique tokens
+
+::: notes
+| make sure every token is uniquely identifiable so it can be revoked
+| without affecting other holders.
+:::
+
+---
+
+# track tokens
+
+::: notes
+| if possible, keep a list of all the tokens you generate, so you can
+| revoke them (you might know that a token has leaked without having
+| access to the token itself). if tokens have unique ids, you can
+| store them instead of the tokens, this way it's not sensitive info
+:::
+
+---
+
+# expiration date
+
+::: notes
+| revocation and emission lists can only grow, so they need to be
+| pruned at some point. the simplest way to do that is to give every
+| token an expiration date, and then store this date in the emission
+| and revocation lists. this way, pruning is easy.
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ---
 
@@ -377,34 +510,63 @@ check if source_ip("127.0.0.1");
 
 # Principle of least privilege
 
-::: incremental
-- static identity-based authorization rules
-- deliver single-use tokens on demand
-- dedicated execution roles
-- perf / latency tradeoff
-:::
-
 ::: notes
 | even with revocation in place, there is still latency. so reducing
 | the blast radius during that vuln window is always a good thing.
+:::
+
+---
+
+# Dedicated execution roles
+
+::: notes
 | of course you want people to have access to what they need, so 
 | identity-based rules tend to be static.
-| however, if you can deliver tokens crafted specially for the
-| operations you're trying to carry out, you avoid a lot of issues
-| another example is AWS execution roles you can define for lambdas
+| a good example is AWS execution roles you can define for lambdas
 | where each lambda gets dedicated credentials that are only valid
 | for the execution duration
+:::
+
+---
+
+# Single use tokens on demand (better)
+
+::: notes
+| however, if you can deliver tokens crafted specially for the
+| operations you're trying to carry out, you avoid a lot of issues
 | it's not always feasible though, especially with central auth
 | systems where creating new roles takes time (eg AWS)
 :::
 
 ---
 
+# Perf / latency tradeoff
+
+::: notes
+| it's not always feasible though, especially with central auth
+| systems where creating new roles takes time (eg AWS)
+| KMS has a dedicated feature, just for that: creating restricted access tokens
+| without bothering with IAM
+:::
+
+---
+
+# [✨offline attenuation ✨]{.jumbo}
+
+::: notes
+| what if you could generate single-use token on demand, in a hot path, with
+| no perf cost?
+|
+| that's exactly what offline attenuation does
+:::
+
+---
+
 # Key rotation
 
-- plan from day 1
-- perform regular rotations
-- forbids eternal tokens
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ::: notes
 | same as for revocation, this has to be planned from day 1 because
@@ -414,6 +576,21 @@ check if source_ip("127.0.0.1");
 | rotating keys mandates that every token has an expiration date, so
 | that you can retire keys without breaking anything
 :::
+
+---
+
+# perform regular rotations
+
+::: notes
+| the best way to be prepared is to rotate keys regularly and make
+| sure nothing breaks.
+| rotating keys mandates that every token has an expiration date, so
+| that you can retire keys without breaking anything
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ---
 
@@ -467,18 +644,24 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# Auth gateway: challenges
+# challenges
 
-::: incremental
-- more complexity at ingress
-- usually about authn; what about authz?
-- usually coarse-grained
-:::
+---
+
+# complexity @ ingress
 
 ::: notes
 | makes the ingress logic more complicated, so it can affect its
 | robustness.
-| just half the story: how are internal calls authorized? does the
+| just half the story: how are internal calls authorized?
+:::
+
+---
+
+# coarse-grained model
+
+::: notes
+| does the
 | gateway need to know about every service internals so it can
 | perform authorization. in practice this nudges into very coarse
 | grained authz rules: rules that the gateway can check itself
@@ -489,34 +672,7 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# Internal calls with service-level restrictions
-
-<pre style="margin-left: auto; margin-right: auto;">
-                 services
-incoming         ┌────┐
-────────────────►│    │
-request          │ 1  ├─────┐
-                 └────┘     │
-                            │ authorized
-                 ┌────┐     │ as service 1
-                 │    │     │
-                 │ 2  │◄────┘
-                 └────┘
-</pre>
-
-::: notes
-| can be combined with an auth gateway
-| static restrictions per service. better than a trusted network
-:::
-
----
-
-# Internal calls with service-level restrictions: challenges
-
-::: incremental
-- confused deputy attacks
-- no tenant isolation
-:::
+# confused deputy attacks
 
 ::: notes
 | services can still be tricked into performing operations that
@@ -557,6 +713,22 @@ request          │ 1  ├────▼┐
 
 # Internal calls with offline attenuation
 
+<pre style="margin-left: auto; margin-right: auto;">
+              incoming credentials
+             ┌─────────────┐
+             │             │
+             │   services  │
+incoming     │   ┌────┐    │
+─────────────┴──►│    │  ┌─┴───┐
+request          │ 1  ├──┤magic│
+                 └────┘  └─┬───┘
+                           │ authorized as incoming
+                 ┌────┐    │ request
+                 │    │    │ (+ request-specific
+                 │ 2  │◄───┘    restrictions)
+                 └────┘
+</pre>
+
 ::: notes
 | same as before, but each service attenuates the token before
 | passing it further. this way, even if a service is compromised,
@@ -571,55 +743,46 @@ request          │ 1  ├────▼┐
 # Token delivery service
 
 <pre style="margin-left: auto; margin-right: auto;">
-┌────┐ auth data    ┌────────┐
-│user├─────────────►│token   │
-│    │              │delivery│
-├──┬─┘◄─────────────┤service │
-│  │    token(s)    └────────┘
-│  │
-│  │
-│  │                  ┌───────┐
-│  └─────────────────►│service│
-│                     │  1    │
-│                     └───────┘
-│
-│                     ┌───────┐
-└─────────────────────┤service│
-                      │  2    │
-                      └───────┘
+┌────────┐ auth data    ┌────────┐
+│        ├─────────────►│token   │
+│  user  │              │delivery│
+│        │◄─────────────┤service │
+└─┬────┬─┘  token(s)    └────────┘
+  │    │
+  │    │
+  │    │                  ┌───────┐
+  │    └─────────────────►│service│
+  │                       │  1    │
+  │                       └───────┘
+  │
+  │                       ┌───────┐
+  └──────────────────────►│service│
+                          │  2    │
+                          └───────┘
 </pre>
-
----
-
-# Token delivery service
-
-::: incremental
-- no need for an auth gateway
-- central authn service out of the hot path
-- direct service access
-- great for developer tooling
-:::
 
 ::: notes
 | this one is interesting if you can directly expose services
 | the user logs in at the token service, and gets access tokens
 | they can use to access services directly. i used it at fretlink
 | and it was super robust.
-| as a bonus it was great for developers as it also provided a web
-| ui to manually generate tokens (useful for admin operations for
-| instance)
 :::
 
 ---
 
-# Token delivery service: challenges
+# out of the hot path
 
-::: incremental
-- direct service access
-- per-service tokens
-- cross-service tokens
-- still requires service-specific access rules modeling
+::: notes
+the auth service is called once and then services are accessed directly
 :::
+
+---
+
+# challenges
+
+---
+
+# cross-service tokens
 
 ::: notes
 | it added a bit of complexity because
@@ -630,6 +793,28 @@ request          │ 1  ├────▼┐
 | same as the auth gateway, a central source of truth requires a
 | common auth model. this can be limiting.
 :::
+
+---
+
+# Recap
+
+::: incremental
+- centralized auth is simpler…
+- but SPOF-y
+- decentralized auth is doable…
+- but plan for REVOCATION
+- Least Privilege Principle
+- (offline attenuation is great)
+- Eat biscuits
+:::
+
+---
+
+<div style="height: 100vh; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+## [biscuitsec.org](https://biscuitsec.org)
+## [github.com/biscuit-auth](https://github.com/biscuit-auth)
+## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
+</div>
 
 ---
 
