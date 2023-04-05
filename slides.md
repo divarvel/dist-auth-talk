@@ -816,10 +816,6 @@ the auth service is called once and then services are accessed directly
 ## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
 </div>
 
----
-
-# Thanks!
-
 <!--
 
 ---
