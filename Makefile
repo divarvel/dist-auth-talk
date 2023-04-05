@@ -11,7 +11,8 @@ slides-light.html: slides.md template.html
 
 slides.html: slides.md template.html
 	pandoc -t dzslides \
-	      --self-contained \
+	      --standalone \
+	      --embed-resources \
 	      --template template.html \
 	      --highlight-style zenburn \
 	      --metadata display-notes \
