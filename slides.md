@@ -67,6 +67,7 @@ author:
 | teams management, blast radius of a bug / vuln)
 :::
 
+<!--
 ---
 
 # hardware failure
@@ -99,10 +100,17 @@ author:
 
 # [compartimentalize]{.jumbo}
 
+-->
+
 ---
 
 # Tradeoffs
 
+---
+
+# Latency
+
+<!--
 ---
 
 # new failure modes
@@ -131,6 +139,8 @@ author:
 | either the data is replicated from somewhere and possibly out of date
 | or it is just not available locally
 :::
+
+-->
 
 ---
 
@@ -810,8 +820,18 @@ the auth service is called once and then services are accessed directly
 
 ---
 
+# Biscuit next steps<br><small>(contributors welcome)</small>
+  
+- updated documentation
+- biscuit-wasm
+- biscuit-java update
+- biscuit-python release
+
+---
+
 <div style="height: 100vh; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
 ## [biscuitsec.org](https://biscuitsec.org)
+## [docs.biscuitsec.org](https://docs.biscuitsec.org)
 ## [github.com/biscuit-auth](https://github.com/biscuit-auth)
 ## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
 </div>
