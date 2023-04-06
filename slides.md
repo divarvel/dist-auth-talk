@@ -106,9 +106,20 @@ author:
 
 # Tradeoffs
 
+::: notes
+| after a few years of μservices being trendy, we're starting to know tradeoffs
+| well.
+:::
+
 ---
 
 # Latency
+
+::: notes
+| in the context of auth, the biggest tradeoff is latency in data updates. you
+| usually want a single source of truth with auth, and in a distributed system
+| you don't have a single data store, so propagation takes time
+:::
 
 ---
 
@@ -147,6 +158,11 @@ author:
 ---
 
 # Monolith, [[fewer problems]{}]{.incremental}
+
+::: notes
+| in terms of solely auth, a monolith is unequivocally better. centralized
+| auth is simpler
+:::
 
 ---
 
@@ -200,14 +216,6 @@ author:
 
 ---
 
-# Centralized auth in a distributed system
-
----
-
-# Distributed auth in a distributed system
-
----
-
 <h1 style="z-index: 2; background-color: rgba(255,255,255, 0.3);">Centralized</h1>
 
 :::bigimage
@@ -215,6 +223,7 @@ author:
 :::
 
 ::: notes
+| you can still keep auth completely centralized in a distributed system
 | every node calls out to the auth service.
 | conceptually simple, but the auth service is a SPOF
 | some guarantees are still lost
@@ -234,7 +243,8 @@ author:
 
 ::: notes
 | if you want truly autonomous nodes and an auth service spof is
-| not possible.
+| not possible, then each service decides on its own.
+| but how?
 :::
 
 ---
@@ -412,6 +422,14 @@ check if source_ip("127.0.0.1");
 
 ---
 
+# Demo
+
+::: notes
+| TODO
+:::
+
+---
+
 # Mitigating issues
 
 ::: notes
@@ -576,6 +594,10 @@ check if source_ip("127.0.0.1");
 
 # Key rotation
 
+::: notes
+| change keys regularly, accept both old and new keys during a limited period
+:::
+
 ---
 
 # [do it yesterday[]{.make-alternate}]{.jumbo}
@@ -583,10 +605,6 @@ check if source_ip("127.0.0.1");
 ::: notes
 | same as for revocation, this has to be planned from day 1 because
 | once you need it, you have to be fast.
-| the best way to be prepared is to rotate keys regularly and make
-| sure nothing breaks.
-| rotating keys mandates that every token has an expiration date, so
-| that you can retire keys without breaking anything
 :::
 
 ---
@@ -657,6 +675,10 @@ untrusted│t │                     ┌───┐     │   │
 ---
 
 # challenges
+
+::: notes
+| quite common and convenient. not perfect though
+:::
 
 ---
 
@@ -792,18 +814,17 @@ the auth service is called once and then services are accessed directly
 
 # challenges
 
+::: notes
+| the only truly decentralized solution
+:::
+
 ---
 
-# cross-service tokens
+# internals are more exposed
 
 ::: notes
-| it added a bit of complexity because
-| we had per-service tokens, but that could be avoided with biscuits
-| a cross-service token requires some thought so that service-specific
-| info doesn't conflict / doesn't get wrongfully interpreted by another
-| service
-| same as the auth gateway, a central source of truth requires a
-| common auth model. this can be limiting.
+| stuff that is usually hidden behind the gateway is now exposed, so it can
+| be more brittle, and there is a bigger attack surface
 :::
 
 ---
