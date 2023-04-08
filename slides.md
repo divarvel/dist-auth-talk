@@ -344,22 +344,17 @@ properties
 
 # Biscuit: token
 
-<!--
-```biscuit-datalog
-// token payload: data
-user("beb9bf91-4dfb-4bbb-be83-940864724008");
-// token payload: auth rules
+```{=html}
+<bc-datalog-editor>
+<code>
+// datalog payload: data
+user("01GXHB9ZFJEAWF9QN7WEDX6E1E");
+// datalog payload: auth rules
 check if time($time), $time < 2023-03-31T00:10:46Z;
+</code>
+</bc-datalog-editor>
 ```
--->
-<img src="./assets/biscuit-payload.png" style="max-width: 100%" />
 
-```
-EsUBClsKJGJlYjliZjkxLTRkZmItNGJiYi1iZTgzLTk0MDg2NDcyNDAwOBgDIgkKBwgKEgMYgAgyJgok
-CgIIGxIGCAUSAggFGhYKBAoCCAUKCAoGIIbKmKEGCgQaAggAEiQIABIglxFlJnk5NxQluiM2rKlUgZGw
-jUF64-bwhaTOCq3JcooaQPTn4mky1je8bJgf2KRCKa8mX11b4hE110Pa48qd6iPbEzzZcV6o51eTCCz4
-bh2BXPDhR9_7ZKCGSByb37pIzAkiIgogOLbyK34IreFp76u96usfcb2GS1U-y2T7GY7zIp0RJSM=
-```
 ::: notes
 | here is an example of a token. it contains a regular payload, but also
 | auth rules. the token itself can carry auth logic, and it's crucial in some
@@ -371,24 +366,44 @@ bh2BXPDhR9_7ZKCGSByb37pIzAkiIgogOLbyK34IreFp76u96usfcb2GS1U-y2T7GY7zIp0RJSM=
 
 ---
 
+# Biscuit: token
+
+```{=html}
+<bc-token-generator privateKey="7acc936a92ceaeaefb1e21483877ba0b603f2b9bcdcf6422a19e9f488cc16a75">
+<code class="block">
+// datalog payload: data
+user("01GXHB9ZFJEAWF9QN7WEDX6E1E");
+// datalog payload: auth rules
+check if time($time), $time < 2023-03-31T00:10:46Z;
+</code>
+</bc-token-generator>
+```
+
+---
+
 # Biscuit: auth rules
 
-<!--
-```biscuit-datalog
+```{=html}
+<bc-datalog-editor>
+<code>
 // context provided by the server
 time(2023-03-31T00:00:00Z);
 resource("file1");
 operation("read");
 
 // rules provided by the server
-right("beb9bf91-4dfb-4bbb-be83-940864724008", "file1", "read");
+right("01GXHB9ZFJEAWF9QN7WEDX6E1E", "file1", "read");
 allow if user($user),
          resource($r), 
          operation($op),
          right($user, $r, $op);
+</code>
+</bc-datalog-editor>
 ```
--->
+
+<!--
 <img src="./assets/biscuit-rules.png" style="max-width: 100%" />
+-->
 
 ::: notes
 | the token itself can carry rules, but ultimately it's up to the receiving
@@ -404,14 +419,19 @@ allow if user($user),
 
 # Biscuit: offline attenuation
 
-<!--
-```biscuit-datalog
+```{=html}
+<bc-datalog-editor>
+<code>
 // block appended by the token holder: the resulting
 // token can only be used locally
 check if source_ip("127.0.0.1");
+</code>
+</bc-datalog-editor>
 ```
--->
+
+<!--
 <img src="./assets/biscuit-check.png" style="max-width: 100%" />
+-->
 
 ::: notes
 | the biscuit crypto model allows a token holder to craft a new token by
