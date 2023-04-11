@@ -874,7 +874,7 @@ the auth service is called once and then services are accessed directly
 
 <div style="height: 100vh; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
 ## [biscuitsec.org](https://biscuitsec.org)
-## [docs.biscuitsec.org](https://docs.biscuitsec.org)
+## [doc.biscuitsec.org](https://doc.biscuitsec.org)
 ## [github.com/biscuit-auth](https://github.com/biscuit-auth)
 ## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
 </div>
