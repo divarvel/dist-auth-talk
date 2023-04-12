@@ -258,33 +258,6 @@ properties
 
 ---
 
-# distributed trust
-
-::: notes
-| in this setup, there is no central auth system that you can query
-| for fresh information. you have to rely on bearer tokens
-:::
-
----
-
-# incomplete data
-
-::: notes
-| in this setup, a service may carry enough information to make
-| auth decisions, so sometimes a cache of external context is required
-:::
-
----
-
-# stale data
-
-::: notes
-| this cache can become stale
-| bearer tokens themselves can become stale. need for revocation
-:::
-
----
-
 # Bearer tokens (boring)
 
 - JWT (super common, can be tricky)
@@ -311,6 +284,220 @@ properties
 :::
 
 ---
+
+# distributed trust
+
+::: notes
+| in this setup, there is no central auth system that you can query
+| for fresh information. you have to rely on bearer tokens
+:::
+
+---
+
+# incomplete data
+
+::: notes
+| in this setup, a service may carry enough information to make
+| auth decisions, so sometimes a cache of external context is required
+| this cache can become stale
+| bearer tokens themselves can become stale. need for revocation
+:::
+
+---
+
+# Mitigating issues
+
+::: notes
+| the main issue with distributed auth and bearer tokens is that once
+| a token has been created, there is no direct way to invalidate it.
+| the only way you can do it is to tell everyone "stop accepting this
+| token in particular"
+:::
+
+---
+
+# [revocation]{.jumbo}
+
+::: notes
+| talking about token revocation could easily fill a 1h slot so we'll
+| have to summarize
+| have a basic revocation infra available from day 1, even if it's
+| dumb. You'll thank yourself once you have to revoke a token.
+| make sure every token is uniquely identifiable so it can be revoked
+| without affecting other holders.
+| if possible, keep a list of all the tokens you generate, so you can
+| revoke them (you might know that a token has leaked without having
+| access to the token itself). if tokens have unique ids, you can
+| store them instead of the tokens, this way it's not sensitive info
+| revocation and emission lists can only grow, so they need to be
+| pruned at some point. the simplest way to do that is to give every
+| token an expiration date, and then store this date in the emission
+| and revocation lists. this way, pruning is easy.
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
+
+::: notes
+| have a basic revocation infra available from day 1, even if it's
+| dumb. You'll thank yourself once you have to revoke a token.
+| make sure every token is uniquely identifiable so it can be revoked
+| without affecting other holders.
+:::
+
+---
+
+# unique tokens
+
+::: notes
+| make sure every token is uniquely identifiable so it can be revoked
+| without affecting other holders.
+:::
+
+---
+
+# track tokens
+
+::: notes
+| if possible, keep a list of all the tokens you generate, so you can
+| revoke them (you might know that a token has leaked without having
+| access to the token itself). if tokens have unique ids, you can
+| store them instead of the tokens, this way it's not sensitive info
+:::
+
+---
+
+# expiration date
+
+::: notes
+| revocation and emission lists can only grow, so they need to be
+| pruned at some point. the simplest way to do that is to give every
+| token an expiration date, and then store this date in the emission
+| and revocation lists. this way, pruning is easy.
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
+
+---
+
+# Access token / refresh token
+
+<pre style="margin-left: auto; margin-right: auto;">
+┌───────┐ auth data         ┌────────────────┐
+│  user ├──────────────────▲│ token delivery │
+└─────┬─┘▼──────────────────┤    service     │
+   ▲  │    refresh token    └─────────┬──────┘
+   │  │     + access token        ▲   │
+   │  │                           │   │
+   │  │   refresh token           │   │
+   │  └───────────────────────────┘   │
+   │                                  │
+   └──────────────────────────────────┘
+          access token
+           + refresh token
+</pre>
+
+::: notes
+| a good way to reduce tokens lifetime is to separate access tokens
+| from refresh tokens. access tokens are bearer tokens with a
+| predefinite validity period. refresh tokens are stateful and can
+| be exchanged for access tokens. The access token delivery service
+| is still a spof, but is not on the hot path for every request, so
+| failure is more tolerable.
+| adjusting the access token validity period lets you chose a
+| compromise between freshness and resilience
+:::
+
+---
+
+# Key rotation
+
+::: notes
+| change keys regularly, accept both old and new keys during a limited period
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
+
+::: notes
+| same as for revocation, this has to be planned from day 1 because
+| once you need it, you have to be fast.
+:::
+
+---
+
+# perform regular rotations
+
+::: notes
+| the best way to be prepared is to rotate keys regularly and make
+| sure nothing breaks.
+| rotating keys mandates that every token has an expiration date, so
+| that you can retire keys without breaking anything
+:::
+
+---
+
+# [do it yesterday[]{.make-alternate}]{.jumbo}
+
+---
+
+
+# Principle of least privilege
+
+::: notes
+| even with revocation in place, there is still latency. so reducing
+| the blast radius during that vuln window is always a good thing.
+:::
+
+---
+
+# Dedicated execution roles
+
+::: notes
+| of course you want people to have access to what they need, so 
+| identity-based rules tend to be static.
+| a good example is AWS execution roles you can define for lambdas
+| where each lambda gets dedicated credentials that are only valid
+| for the execution duration
+:::
+
+---
+
+# Single purpose tokens on demand (better)
+
+::: notes
+| however, if you can deliver tokens crafted specially for the
+| operations you're trying to carry out, you avoid a lot of issues
+| it's not always feasible though, especially with central auth
+| systems where creating new roles takes time (eg AWS)
+:::
+
+---
+
+# Perf / latency tradeoff
+
+::: notes
+| it's not always feasible though, especially with central auth
+| systems where creating new roles takes time (eg AWS)
+| KMS has a dedicated feature, just for that: creating restricted access tokens
+| without bothering with IAM
+:::
+
+---
+
+# [✨offline attenuation ✨]{.jumbo}
+
+::: notes
+| what if you could generate single-use token on demand, in a hot path, with
+| no perf cost?
+|
+| that's exactly what offline attenuation does
+:::
+
 
 # Biscuit
 
@@ -447,200 +634,6 @@ check if source_ip("127.0.0.1");
 ::: notes
 | TODO
 :::
-
----
-
-# Mitigating issues
-
-::: notes
-| the main issue with distributed auth and bearer tokens is that once
-| a token has been created, there is no direct way to invalidate it.
-| the only way you can do it is to tell everyone "stop accepting this
-| token in particular"
-:::
-
----
-
-# [revocation]{.jumbo}
-
-::: notes
-| talking about token revocation could easily fill a 1h slot so we'll
-| have to summarize
-| have a basic revocation infra available from day 1, even if it's
-| dumb. You'll thank yourself once you have to revoke a token.
-| make sure every token is uniquely identifiable so it can be revoked
-| without affecting other holders.
-| if possible, keep a list of all the tokens you generate, so you can
-| revoke them (you might know that a token has leaked without having
-| access to the token itself). if tokens have unique ids, you can
-| store them instead of the tokens, this way it's not sensitive info
-| revocation and emission lists can only grow, so they need to be
-| pruned at some point. the simplest way to do that is to give every
-| token an expiration date, and then store this date in the emission
-| and revocation lists. this way, pruning is easy.
-:::
-
----
-
-# [do it yesterday[]{.make-alternate}]{.jumbo}
-
-::: notes
-| have a basic revocation infra available from day 1, even if it's
-| dumb. You'll thank yourself once you have to revoke a token.
-| make sure every token is uniquely identifiable so it can be revoked
-| without affecting other holders.
-:::
-
----
-
-# unique tokens
-
-::: notes
-| make sure every token is uniquely identifiable so it can be revoked
-| without affecting other holders.
-:::
-
----
-
-# track tokens
-
-::: notes
-| if possible, keep a list of all the tokens you generate, so you can
-| revoke them (you might know that a token has leaked without having
-| access to the token itself). if tokens have unique ids, you can
-| store them instead of the tokens, this way it's not sensitive info
-:::
-
----
-
-# expiration date
-
-::: notes
-| revocation and emission lists can only grow, so they need to be
-| pruned at some point. the simplest way to do that is to give every
-| token an expiration date, and then store this date in the emission
-| and revocation lists. this way, pruning is easy.
-:::
-
----
-
-# [do it yesterday[]{.make-alternate}]{.jumbo}
-
----
-
-# Access token / refresh token
-
-<pre style="margin-left: auto; margin-right: auto;">
-┌───────┐ auth data         ┌────────────────┐
-│  user ├──────────────────▲│ token delivery │
-└─────┬─┘▼──────────────────┤    service     │
-   ▲  │    refresh token    └─────────┬──────┘
-   │  │     + access token        ▲   │
-   │  │                           │   │
-   │  │   refresh token           │   │
-   │  └───────────────────────────┘   │
-   │                                  │
-   └──────────────────────────────────┘
-          access token
-           + refresh token
-</pre>
-
-::: notes
-| a good way to reduce tokens lifetime is to separate access tokens
-| from refresh tokens. access tokens are bearer tokens with a
-| predefinite validity period. refresh tokens are stateful and can
-| be exchanged for access tokens. The access token delivery service
-| is still a spof, but is not on the hot path for every request, so
-| failure is more tolerable.
-| adjusting the access token validity period lets you chose a
-| compromise between freshness and resilience
-:::
-
----
-
-# Principle of least privilege
-
-::: notes
-| even with revocation in place, there is still latency. so reducing
-| the blast radius during that vuln window is always a good thing.
-:::
-
----
-
-# Dedicated execution roles
-
-::: notes
-| of course you want people to have access to what they need, so 
-| identity-based rules tend to be static.
-| a good example is AWS execution roles you can define for lambdas
-| where each lambda gets dedicated credentials that are only valid
-| for the execution duration
-:::
-
----
-
-# Single use tokens on demand (better)
-
-::: notes
-| however, if you can deliver tokens crafted specially for the
-| operations you're trying to carry out, you avoid a lot of issues
-| it's not always feasible though, especially with central auth
-| systems where creating new roles takes time (eg AWS)
-:::
-
----
-
-# Perf / latency tradeoff
-
-::: notes
-| it's not always feasible though, especially with central auth
-| systems where creating new roles takes time (eg AWS)
-| KMS has a dedicated feature, just for that: creating restricted access tokens
-| without bothering with IAM
-:::
-
----
-
-# [✨offline attenuation ✨]{.jumbo}
-
-::: notes
-| what if you could generate single-use token on demand, in a hot path, with
-| no perf cost?
-|
-| that's exactly what offline attenuation does
-:::
-
----
-
-# Key rotation
-
-::: notes
-| change keys regularly, accept both old and new keys during a limited period
-:::
-
----
-
-# [do it yesterday[]{.make-alternate}]{.jumbo}
-
-::: notes
-| same as for revocation, this has to be planned from day 1 because
-| once you need it, you have to be fast.
-:::
-
----
-
-# perform regular rotations
-
-::: notes
-| the best way to be prepared is to rotate keys regularly and make
-| sure nothing breaks.
-| rotating keys mandates that every token has an expiration date, so
-| that you can retire keys without breaking anything
-:::
-
----
-
-# [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ---
 
@@ -792,6 +785,31 @@ request          │ 1  ├──┤magic│
 | per-request/per-service level.
 :::
 
+
+---
+
+# Mixing trust domains
+
+<pre style="margin-left: auto; margin-right: auto;">
+                                  services
+                                   ┌───┐
+          ┌──┐                     │   │
+          │  ├─────────────────────► 1 │
+          │g │  ▲                  └───┘
+          │a ├──┘inject rights
+access    │t │                     ┌───┐
+ ────────►│e │                     │   │
+token     │w ├─────────────────────► 2 │
+          │a │  ▲                  └───┘
+          │y ├──┘
+          │  │  inject rights      ┌───┐
+          │  │                     │   │
+          │  ├─────────────────────► 3 │
+          └─┬┘  ▲                  └───┘
+            └───┘
+                inject rights
+</pre>
+
 ---
 
 # Token delivery service
@@ -879,85 +897,3 @@ the auth service is called once and then services are accessed directly
 ## [github.com/biscuit-auth](https://github.com/biscuit-auth)
 ## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
 </div>
-
-<!--
-
----
-
-# Plan
-
-- comment choisir entre un système d'auth centralisé et un système distribué
-- un tour d'horizon des solutions possibles pour les jetons au porteur;
-- les différentes architectures d'auth possibles (passerelle d'auth, intégration directe, …);
-- les éléments indispensables à mettre en place dans un tel système (rafraichissement des tokens, révocation, rotation des clés, …);
-- la plateforme biscuit, construite autours de ces use cases.
-
----
-
-# Centered title
-
----
-
-# Centered title even when it's long and spans multiple lines
-
----
-
-# Centered [[incremental]{}]{.incremental} title
-
----
-
-# Top title
-
-- With
-- content
-
----
-
-# Top title
-
-::: incremental
-- a
-- b
-- c
-:::
-
----
-
-# [Jumbo text]{.jumbo}
-
----
-
-::: jumbogroup
-
-## [a group of]{.jumbo}
-## [big jumbo text]{.jumbo}
-## [because it's fun]{.jumbo}
-
-::::::::::
-
----
-
-```haskell
-test :: Test
-test = do
-  traverse (`xor` b) [test]
-  
-```
-
----
-
-# Title that should be centered but is not because of notes
-
-::: notes
-| notes that are displayed because the right flag is added to the pandoc
-| invocation. The leading `|` character allows to preserve line breaks,
-| that's convenient in notes
-:::
-
----
-
-:::bigimage
-![](./assets/puna.jpg)
-:::
-
--->
