@@ -498,6 +498,7 @@ properties
 | that's exactly what offline attenuation does
 :::
 
+---
 
 # Biscuit
 
@@ -526,6 +527,43 @@ properties
 | (ie without needing the signing key). such blocks can only restrict a token
 | scope
 :::
+
+---
+
+# Timeline
+
+- init 2018 (offline attenuation & datalog)
+- v1 in 2019 (faster crypto & better datalog)
+- v2 2022 (boring-er crypto & scoping)
+- v3 2023 (third-party blocks)
+
+---
+
+# Implementations
+
+- rust (biscuit v3 ref implementation)
+- JS (biscuit v3, rust via WebAssembly)
+- Haskell (biscuit v3)
+- Java (biscuit v2)
+- Go (biscuit v2)
+- python (in progress)
+- .Net (in progress)
+
+---
+
+# Tooling
+
+- CLI
+- web components
+- editor support (vscode, helix, tree-sitter)
+
+---
+
+# Used in prod
+
+- Clever Cloud
+- SpaceAndTime
+- nixbuild.net
 
 ---
 
