@@ -866,6 +866,7 @@ the auth service is called once and then services are accessed directly
 # Biscuit next steps<br><small>(contributors welcome)</small>
   
 - updated documentation
+- vscode support
 - biscuit-wasm
 - biscuit-java update
 - biscuit-python release
