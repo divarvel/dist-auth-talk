@@ -67,41 +67,6 @@ author:
 | teams management, blast radius of a bug / vuln)
 :::
 
-<!--
----
-
-# hardware failure
-
----
-
-# [compartimentalize]{.jumbo}
-
----
-
-# resource use
-
----
-
-# [compartimentalize]{.jumbo}
-
----
-
-# trust scopes
-
----
-
-# [compartimentalize]{.jumbo}
-
----
-
-# teams
-
----
-
-# [compartimentalize]{.jumbo}
-
--->
-
 ---
 
 # Tradeoffs
@@ -120,40 +85,6 @@ author:
 | usually want a single source of truth with auth, and in a distributed system
 | you don't have a single data store, so propagation takes time
 :::
-
----
-
-<!--
----
-
-# new failure modes
-
-::: notes
-| the biggest tradeoff is that turning local calls into network
-| calls creates tons of new failure modes, 
-:::
-
----
-
-# latency (network calls)
-
-::: notes
-| + performance considerations
-| when aggregating data,  that you have to account for.
-:::
-
----
-
-# data fragmentation
-
-::: notes
-| compartimentalization is also a drawback: a central data model is very
-| convenient. moving away from that makes things harder:
-| either the data is replicated from somewhere and possibly out of date
-| or it is just not available locally
-:::
-
--->
 
 ---
 
@@ -284,6 +215,13 @@ properties
 :::
 
 ---
+
+:::bigimage
+![](./assets/bearer-tokens.jpg)
+:::
+
+---
+
 
 # distributed trust
 
@@ -503,6 +441,11 @@ properties
 # Biscuit
 
 ::: incremental
+- public key crypto (ed25519)
+- offline attenuation
+:::
+
+::: incremental
 - spec + implementations
 :::
 
@@ -510,11 +453,6 @@ properties
 - token format (crypto)
 - token format (payload)
 - authorization rules (semantics)
-:::
-
-::: incremental
-- public key crypto (ed25519)
-- offline attenuation
 :::
 
 ::: notes
