@@ -33,12 +33,13 @@ generateBiscuit secret =
 
 main :: IO ()
 main = do
-  secret <- newSecret
+  -- Just secret <- 
   -- Just publicKey <- parsePublicKeyHex . fromString <$> getEnv "BISCUIT_PUBLIC_KEY"
-  let publicKey = toPublic secret
-  putStrLn "=== This token grants access to /protected/puna and /protected/nix ==="
-  putBSLn . serializeB64 =<< generateBiscuit secret
-  putStrLn "=== Starting server ==="
+  -- let publicKey = toPublic secret
+  Just publicKey <- pure $ parsePublicKeyHex "038cbdb5683c4f1ecc3082e39342dfe59e7a61e3a96364e30021172e27a60a50"
+  -- putStrLn "=== This token grants access to /protected/puna and /protected/nix ==="
+  -- putBSLn . serializeB64 =<< generateBiscuit secret
+  putStrLn "=== Starting server on port 8080 ==="
   runEnv 8080 $
     serveWithContext @API
       Proxy
@@ -47,13 +48,14 @@ main = do
 
 type API =
   (RequireBiscuit :> Routes)
-    :<|> ("static" :> Raw)
+    :<|> Raw
 
 type Routes = "protected" :> "dog" :> QueryParam' '[Required] "dog" Dog :> Get '[HTML, Picture] Pic
 
 ambientChecks :: MonadIO m => m Authorizer
 ambientChecks = do
   now <- liftIO getCurrentTime
+
   pure [authorizer|time({now});|]
 
 server :: Server API

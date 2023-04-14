@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf8">
 <script src="https://unpkg.com/htmx.org@1.8.5"></script>
+<script src="/index.js" type="module"></script>
 
 
 <style>
@@ -12,7 +13,7 @@ body {
   background-color: blue;
   font-family: sans-serif;
 }
-main {
+#main {
   display: flex;
   flex-direction: row;
 }
@@ -44,6 +45,7 @@ main {
 <body>
 
 <main>
+<section id="main">
 <section id="form">
 <form hx-get="/protected/dog" hx-target="#pic">
   <h1>Coucou</h1>
@@ -60,5 +62,19 @@ main {
 </form>
 </section>
 <section id="pic" hx-swap="innerHTML"></section>
+</section>
+
+
+<section id="tooling">
+<bc-token-generator privateKey="a36206549d22431aec72f8d9f4b3b3e7a2499c5ef99b16b8a9b8f2b8d2f68cdf">
+</bc-token-generator>
+</section>
 </main>
+
+<script>
+const pic = document.getElementById("pic");
+pic.addEventListener("click", () => {
+  pic.innerHTML = '';
+});
+</script>
 </body>
