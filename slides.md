@@ -8,11 +8,12 @@ author:
   - name: Clément Delafargue
     desc:
       - Software developer at <a href="https://outscale.com">3DS Outscale</a>
-      - <a href="https://framapiaf.org/clementd">@clementd</a>
+      - <a href="https://framapiaf.org/clementd">@clementd@framapiaf.org</a>
   - name: Geoffroy Couprie
     desc:
       - Apollo GraphQL
-      - "@geal@mastodon.social"
+      - <a href="https://twitter.com/gcouprie">@gcouprie</a>
+      - <a href="https://mastodon.social/@geal">@geal@mastodon.social</a>
 ---
 
 # What is auth?
@@ -607,9 +608,7 @@ check if source_ip("127.0.0.1");
 
 # Demo
 
-::: notes
-| TODO
-:::
+<https://github.com/divarvel/dist-auth-talk/tree/main/demos>
 
 ---
 
