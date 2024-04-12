@@ -3,26 +3,26 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const t$3=window,e$6=t$3.ShadowRoot&&(void 0===t$3.ShadyCSS||t$3.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,s$3=Symbol(),n$4=new WeakMap;class o$4{constructor(t,e,n){if(this._$cssResult$=!0,n!==s$3)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e;}get styleSheet(){let t=this.o;const s=this.t;if(e$6&&void 0===t){const e=void 0!==s&&1===s.length;e&&(t=n$4.get(s)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),e&&n$4.set(s,t));}return t}toString(){return this.cssText}}const r$2=t=>new o$4("string"==typeof t?t:t+"",void 0,s$3),i$3=(t,...e)=>{const n=1===t.length?t[0]:e.reduce(((e,s,n)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[n+1]),t[0]);return new o$4(n,t,s$3)},S$1=(s,n)=>{e$6?s.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((e=>{const n=document.createElement("style"),o=t$3.litNonce;void 0!==o&&n.setAttribute("nonce",o),n.textContent=e.cssText,s.appendChild(n);}));},c$1=e$6?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const s of t.cssRules)e+=s.cssText;return r$2(e)})(t):t;
+const t$3=window.ShadowRoot&&(void 0===window.ShadyCSS||window.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,e$5=Symbol(),n$5=new Map;class s$3{constructor(t,n){if(this._$cssResult$=!0,n!==e$5)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t;}get styleSheet(){let e=n$5.get(this.cssText);return t$3&&void 0===e&&(n$5.set(this.cssText,e=new CSSStyleSheet),e.replaceSync(this.cssText)),e}toString(){return this.cssText}}const o$4=t=>new s$3("string"==typeof t?t:t+"",e$5),r$2=(t,...n)=>{const o=1===t.length?t[0]:n.reduce(((e,n,s)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(n)+t[s+1]),t[0]);return new s$3(o,e$5)},i$3=(e,n)=>{t$3?e.adoptedStyleSheets=n.map((t=>t instanceof CSSStyleSheet?t:t.styleSheet)):n.forEach((t=>{const n=document.createElement("style"),s=window.litNonce;void 0!==s&&n.setAttribute("nonce",s),n.textContent=t.cssText,e.appendChild(n);}));},S$1=t$3?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const n of t.cssRules)e+=n.cssText;return o$4(e)})(t):t;
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var s$2;const e$5=window,r$1=e$5.trustedTypes,h$1=r$1?r$1.emptyScript:"",o$3=e$5.reactiveElementPolyfillSupport,n$3={toAttribute(t,i){switch(i){case Boolean:t=t?h$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},a$1=(t,i)=>i!==t&&(i==i||t==t),l$3={attribute:!0,type:String,converter:n$3,reflect:!1,hasChanged:a$1};class d$1 extends HTMLElement{constructor(){super(),this._$Ei=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$El=null,this.u();}static addInitializer(t){var i;null!==(i=this.h)&&void 0!==i||(this.h=[]),this.h.push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Ep(s,i);void 0!==e&&(this._$Ev.set(e,s),t.push(e));})),t}static createProperty(t,i=l$3){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$3}static finalize(){if(this.hasOwnProperty("finalized"))return !1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),this.elementProperties=new Map(t.elementProperties),this._$Ev=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(c$1(i));}else void 0!==i&&s.push(c$1(i));return s}static _$Ep(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}u(){var t;this._$E_=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Eg(),this.requestUpdate(),null===(t=this.constructor.h)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$ES)&&void 0!==i?i:this._$ES=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$ES)||void 0===i||i.splice(this._$ES.indexOf(t)>>>0,1);}_$Eg(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Ei.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return S$1(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$EO(t,i,s=l$3){var e;const r=this.constructor._$Ep(t,s);if(void 0!==r&&!0===s.reflect){const h=(void 0!==(null===(e=s.converter)||void 0===e?void 0:e.toAttribute)?s.converter:n$3).toAttribute(i,s.type);this._$El=t,null==h?this.removeAttribute(r):this.setAttribute(r,h),this._$El=null;}}_$AK(t,i){var s;const e=this.constructor,r=e._$Ev.get(t);if(void 0!==r&&this._$El!==r){const t=e.getPropertyOptions(r),h="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==(null===(s=t.converter)||void 0===s?void 0:s.fromAttribute)?t.converter:n$3;this._$El=r,this[r]=h.fromAttribute(i,t.type),this._$El=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||a$1)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$El!==t&&(void 0===this._$EC&&(this._$EC=new Map),this._$EC.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$E_=this._$Ej());}async _$Ej(){this.isUpdatePending=!0;try{await this._$E_;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Ei&&(this._$Ei.forEach(((t,i)=>this[i]=t)),this._$Ei=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$ES)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$Ek();}catch(t){throw i=!1,this._$Ek(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$ES)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$Ek(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$E_}shouldUpdate(t){return !0}update(t){void 0!==this._$EC&&(this._$EC.forEach(((t,i)=>this._$EO(i,this[i],t))),this._$EC=void 0),this._$Ek();}updated(t){}firstUpdated(t){}}d$1.finalized=!0,d$1.elementProperties=new Map,d$1.elementStyles=[],d$1.shadowRootOptions={mode:"open"},null==o$3||o$3({ReactiveElement:d$1}),(null!==(s$2=e$5.reactiveElementVersions)&&void 0!==s$2?s$2:e$5.reactiveElementVersions=[]).push("1.4.1");
+ */var s$2;const e$4=window.trustedTypes,r$1=e$4?e$4.emptyScript:"",h$1=window.reactiveElementPolyfillSupport,o$3={toAttribute(t,i){switch(i){case Boolean:t=t?r$1:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t);}return t},fromAttribute(t,i){let s=t;switch(i){case Boolean:s=null!==t;break;case Number:s=null===t?null:Number(t);break;case Object:case Array:try{s=JSON.parse(t);}catch(t){s=null;}}return s}},n$4=(t,i)=>i!==t&&(i==i||t==t),l$3={attribute:!0,type:String,converter:o$3,reflect:!1,hasChanged:n$4};class a$1 extends HTMLElement{constructor(){super(),this._$Et=new Map,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Ei=null,this.o();}static addInitializer(t){var i;null!==(i=this.l)&&void 0!==i||(this.l=[]),this.l.push(t);}static get observedAttributes(){this.finalize();const t=[];return this.elementProperties.forEach(((i,s)=>{const e=this._$Eh(s,i);void 0!==e&&(this._$Eu.set(e,s),t.push(e));})),t}static createProperty(t,i=l$3){if(i.state&&(i.attribute=!1),this.finalize(),this.elementProperties.set(t,i),!i.noAccessor&&!this.prototype.hasOwnProperty(t)){const s="symbol"==typeof t?Symbol():"__"+t,e=this.getPropertyDescriptor(t,s,i);void 0!==e&&Object.defineProperty(this.prototype,t,e);}}static getPropertyDescriptor(t,i,s){return {get(){return this[i]},set(e){const r=this[t];this[i]=e,this.requestUpdate(t,r,s);},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)||l$3}static finalize(){if(this.hasOwnProperty("finalized"))return !1;this.finalized=!0;const t=Object.getPrototypeOf(this);if(t.finalize(),this.elementProperties=new Map(t.elementProperties),this._$Eu=new Map,this.hasOwnProperty("properties")){const t=this.properties,i=[...Object.getOwnPropertyNames(t),...Object.getOwnPropertySymbols(t)];for(const s of i)this.createProperty(s,t[s]);}return this.elementStyles=this.finalizeStyles(this.styles),!0}static finalizeStyles(i){const s=[];if(Array.isArray(i)){const e=new Set(i.flat(1/0).reverse());for(const i of e)s.unshift(S$1(i));}else void 0!==i&&s.push(S$1(i));return s}static _$Eh(t,i){const s=i.attribute;return !1===s?void 0:"string"==typeof s?s:"string"==typeof t?t.toLowerCase():void 0}o(){var t;this._$Ep=new Promise((t=>this.enableUpdating=t)),this._$AL=new Map,this._$Em(),this.requestUpdate(),null===(t=this.constructor.l)||void 0===t||t.forEach((t=>t(this)));}addController(t){var i,s;(null!==(i=this._$Eg)&&void 0!==i?i:this._$Eg=[]).push(t),void 0!==this.renderRoot&&this.isConnected&&(null===(s=t.hostConnected)||void 0===s||s.call(t));}removeController(t){var i;null===(i=this._$Eg)||void 0===i||i.splice(this._$Eg.indexOf(t)>>>0,1);}_$Em(){this.constructor.elementProperties.forEach(((t,i)=>{this.hasOwnProperty(i)&&(this._$Et.set(i,this[i]),delete this[i]);}));}createRenderRoot(){var t;const s=null!==(t=this.shadowRoot)&&void 0!==t?t:this.attachShadow(this.constructor.shadowRootOptions);return i$3(s,this.constructor.elementStyles),s}connectedCallback(){var t;void 0===this.renderRoot&&(this.renderRoot=this.createRenderRoot()),this.enableUpdating(!0),null===(t=this._$Eg)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostConnected)||void 0===i?void 0:i.call(t)}));}enableUpdating(t){}disconnectedCallback(){var t;null===(t=this._$Eg)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostDisconnected)||void 0===i?void 0:i.call(t)}));}attributeChangedCallback(t,i,s){this._$AK(t,s);}_$ES(t,i,s=l$3){var e,r;const h=this.constructor._$Eh(t,s);if(void 0!==h&&!0===s.reflect){const n=(null!==(r=null===(e=s.converter)||void 0===e?void 0:e.toAttribute)&&void 0!==r?r:o$3.toAttribute)(i,s.type);this._$Ei=t,null==n?this.removeAttribute(h):this.setAttribute(h,n),this._$Ei=null;}}_$AK(t,i){var s,e,r;const h=this.constructor,n=h._$Eu.get(t);if(void 0!==n&&this._$Ei!==n){const t=h.getPropertyOptions(n),l=t.converter,a=null!==(r=null!==(e=null===(s=l)||void 0===s?void 0:s.fromAttribute)&&void 0!==e?e:"function"==typeof l?l:null)&&void 0!==r?r:o$3.fromAttribute;this._$Ei=n,this[n]=a(i,t.type),this._$Ei=null;}}requestUpdate(t,i,s){let e=!0;void 0!==t&&(((s=s||this.constructor.getPropertyOptions(t)).hasChanged||n$4)(this[t],i)?(this._$AL.has(t)||this._$AL.set(t,i),!0===s.reflect&&this._$Ei!==t&&(void 0===this._$E_&&(this._$E_=new Map),this._$E_.set(t,s))):e=!1),!this.isUpdatePending&&e&&(this._$Ep=this._$EC());}async _$EC(){this.isUpdatePending=!0;try{await this._$Ep;}catch(t){Promise.reject(t);}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){var t;if(!this.isUpdatePending)return;this.hasUpdated,this._$Et&&(this._$Et.forEach(((t,i)=>this[i]=t)),this._$Et=void 0);let i=!1;const s=this._$AL;try{i=this.shouldUpdate(s),i?(this.willUpdate(s),null===(t=this._$Eg)||void 0===t||t.forEach((t=>{var i;return null===(i=t.hostUpdate)||void 0===i?void 0:i.call(t)})),this.update(s)):this._$EU();}catch(t){throw i=!1,this._$EU(),t}i&&this._$AE(s);}willUpdate(t){}_$AE(t){var i;null===(i=this._$Eg)||void 0===i||i.forEach((t=>{var i;return null===(i=t.hostUpdated)||void 0===i?void 0:i.call(t)})),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t);}_$EU(){this._$AL=new Map,this.isUpdatePending=!1;}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$Ep}shouldUpdate(t){return !0}update(t){void 0!==this._$E_&&(this._$E_.forEach(((t,i)=>this._$ES(i,this[i],t))),this._$E_=void 0),this._$EU();}updated(t){}firstUpdated(t){}}a$1.finalized=!0,a$1.elementProperties=new Map,a$1.elementStyles=[],a$1.shadowRootOptions={mode:"open"},null==h$1||h$1({ReactiveElement:a$1}),(null!==(s$2=globalThis.reactiveElementVersions)&&void 0!==s$2?s$2:globalThis.reactiveElementVersions=[]).push("1.2.3");
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-var t$2;const i$2=window,s$1=i$2.trustedTypes,e$4=s$1?s$1.createPolicy("lit-html",{createHTML:t=>t}):void 0,o$2=`lit$${(Math.random()+"").slice(9)}$`,n$2="?"+o$2,l$2=`<${n$2}>`,h=document,r=(t="")=>h.createComment(t),d=t=>null===t||"object"!=typeof t&&"function"!=typeof t,u=Array.isArray,c=t=>u(t)||"function"==typeof(null==t?void 0:t[Symbol.iterator]),v=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,a=/-->/g,f=/>/g,_=RegExp(">|[ \t\n\f\r](?:([^\\s\"'>=/]+)([ \t\n\f\r]*=[ \t\n\f\r]*(?:[^ \t\n\f\r\"'`<>=]|(\"|')|))|$)","g"),m=/'/g,p=/"/g,$=/^(?:script|style|textarea|title)$/i,g=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),y=g(1),x=Symbol.for("lit-noChange"),b=Symbol.for("lit-nothing"),T=new WeakMap,A=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new S(i.insertBefore(r(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l},E=h.createTreeWalker(h,129,null,!1),C=(t,i)=>{const s=t.length-1,n=[];let h,r=2===i?"<svg>":"",d=v;for(let i=0;i<s;i++){const s=t[i];let e,u,c=-1,g=0;for(;g<s.length&&(d.lastIndex=g,u=d.exec(s),null!==u);)g=d.lastIndex,d===v?"!--"===u[1]?d=a:void 0!==u[1]?d=f:void 0!==u[2]?($.test(u[2])&&(h=RegExp("</"+u[2],"g")),d=_):void 0!==u[3]&&(d=_):d===_?">"===u[0]?(d=null!=h?h:v,c=-1):void 0===u[1]?c=-2:(c=d.lastIndex-u[2].length,e=u[1],d=void 0===u[3]?_:'"'===u[3]?p:m):d===p||d===m?d=_:d===a||d===f?d=v:(d=_,h=void 0);const y=d===_&&t[i+1].startsWith("/>")?" ":"";r+=d===v?s+l$2:c>=0?(n.push(e),s.slice(0,c)+"$lit$"+s.slice(c)+o$2+y):s+o$2+(-2===c?(n.push(void 0),i):y);}const u=r+(t[s]||"<?>")+(2===i?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return [void 0!==e$4?e$4.createHTML(u):u,n]};class P{constructor({strings:t,_$litType$:i},e){let l;this.parts=[];let h=0,d=0;const u=t.length-1,c=this.parts,[v,a]=C(t,i);if(this.el=P.createElement(v,e),E.currentNode=this.el.content,2===i){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(l=E.nextNode())&&c.length<u;){if(1===l.nodeType){if(l.hasAttributes()){const t=[];for(const i of l.getAttributeNames())if(i.endsWith("$lit$")||i.startsWith(o$2)){const s=a[d++];if(t.push(i),void 0!==s){const t=l.getAttribute(s.toLowerCase()+"$lit$").split(o$2),i=/([.?@])?(.*)/.exec(s);c.push({type:1,index:h,name:i[2],strings:t,ctor:"."===i[1]?R:"?"===i[1]?H:"@"===i[1]?I:M});}else c.push({type:6,index:h});}for(const i of t)l.removeAttribute(i);}if($.test(l.tagName)){const t=l.textContent.split(o$2),i=t.length-1;if(i>0){l.textContent=s$1?s$1.emptyScript:"";for(let s=0;s<i;s++)l.append(t[s],r()),E.nextNode(),c.push({type:2,index:++h});l.append(t[i],r());}}}else if(8===l.nodeType)if(l.data===n$2)c.push({type:2,index:h});else {let t=-1;for(;-1!==(t=l.data.indexOf(o$2,t+1));)c.push({type:7,index:h}),t+=o$2.length-1;}h++;}}static createElement(t,i){const s=h.createElement("template");return s.innerHTML=t,s}}function V(t,i,s=t,e){var o,n,l,h;if(i===x)return i;let r=void 0!==e?null===(o=s._$Cl)||void 0===o?void 0:o[e]:s._$Cu;const u=d(i)?void 0:i._$litDirective$;return (null==r?void 0:r.constructor)!==u&&(null===(n=null==r?void 0:r._$AO)||void 0===n||n.call(r,!1),void 0===u?r=void 0:(r=new u(t),r._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Cl)&&void 0!==l?l:h._$Cl=[])[e]=r:s._$Cu=r),void 0!==r&&(i=V(t,r._$AS(t,i.values),r,e)),i}class N{constructor(t,i){this.v=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}p(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:h).importNode(s,!0);E.currentNode=o;let n=E.nextNode(),l=0,r=0,d=e[0];for(;void 0!==d;){if(l===d.index){let i;2===d.type?i=new S(n,n.nextSibling,this,t):1===d.type?i=new d.ctor(n,d.name,d.strings,this,t):6===d.type&&(i=new L(n,this,t)),this.v.push(i),d=e[++r];}l!==(null==d?void 0:d.index)&&(n=E.nextNode(),l++);}return o}m(t){let i=0;for(const s of this.v)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class S{constructor(t,i,s,e){var o;this.type=2,this._$AH=b,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$C_=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$C_}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===t.nodeType&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=V(this,t,i),d(t)?t===b||null==t||""===t?(this._$AH!==b&&this._$AR(),this._$AH=b):t!==this._$AH&&t!==x&&this.$(t):void 0!==t._$litType$?this.T(t):void 0!==t.nodeType?this.k(t):c(t)?this.O(t):this.$(t);}S(t,i=this._$AB){return this._$AA.parentNode.insertBefore(t,i)}k(t){this._$AH!==t&&(this._$AR(),this._$AH=this.S(t));}$(t){this._$AH!==b&&d(this._$AH)?this._$AA.nextSibling.data=t:this.k(h.createTextNode(t)),this._$AH=t;}T(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=P.createElement(e.h,this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.m(s);else {const t=new N(o,this),i=t.p(this.options);t.m(s),this.k(i),this._$AH=t;}}_$AC(t){let i=T.get(t.strings);return void 0===i&&T.set(t.strings,i=new P(t)),i}O(t){u(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new S(this.S(r()),this.S(r()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$C_=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class M{constructor(t,i,s,e,o){this.type=1,this._$AH=b,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=b;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=V(this,t,i,0),n=!d(t)||t!==this._$AH&&t!==x,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=V(this,e[s+l],i,l),h===x&&(h=this._$AH[l]),n||(n=!d(h)||h!==this._$AH[l]),h===b?t=b:t!==b&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.P(t);}P(t){t===b?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class R extends M{constructor(){super(...arguments),this.type=3;}P(t){this.element[this.name]=t===b?void 0:t;}}const k=s$1?s$1.emptyScript:"";class H extends M{constructor(){super(...arguments),this.type=4;}P(t){t&&t!==b?this.element.setAttribute(this.name,k):this.element.removeAttribute(this.name);}}class I extends M{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=V(this,t,i,0))&&void 0!==s?s:b)===x)return;const e=this._$AH,o=t===b&&e!==b||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==b&&(e===b||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class L{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){V(this,t);}}const Z=i$2.litHtmlPolyfillSupport;null==Z||Z(P,S),(null!==(t$2=i$2.litHtmlVersions)&&void 0!==t$2?t$2:i$2.litHtmlVersions=[]).push("2.3.1");
+var t$2;const i$2=globalThis.trustedTypes,s$1=i$2?i$2.createPolicy("lit-html",{createHTML:t=>t}):void 0,e$3=`lit$${(Math.random()+"").slice(9)}$`,o$2="?"+e$3,n$3=`<${o$2}>`,l$2=document,h=(t="")=>l$2.createComment(t),r=t=>null===t||"object"!=typeof t&&"function"!=typeof t,d=Array.isArray,u=t=>{var i;return d(t)||"function"==typeof(null===(i=t)||void 0===i?void 0:i[Symbol.iterator])},c=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,v=/-->/g,a=/>/g,f=/>|[ 	\n\r](?:([^\s"'>=/]+)([ 	\n\r]*=[ 	\n\r]*(?:[^ 	\n\r"'`<>=]|("|')|))|$)/g,_=/'/g,m=/"/g,g=/^(?:script|style|textarea|title)$/i,p=t=>(i,...s)=>({_$litType$:t,strings:i,values:s}),$=p(1),b=Symbol.for("lit-noChange"),w=Symbol.for("lit-nothing"),T=new WeakMap,x=(t,i,s)=>{var e,o;const n=null!==(e=null==s?void 0:s.renderBefore)&&void 0!==e?e:i;let l=n._$litPart$;if(void 0===l){const t=null!==(o=null==s?void 0:s.renderBefore)&&void 0!==o?o:null;n._$litPart$=l=new N(i.insertBefore(h(),t),t,void 0,null!=s?s:{});}return l._$AI(t),l},A=l$2.createTreeWalker(l$2,129,null,!1),C=(t,i)=>{const o=t.length-1,l=[];let h,r=2===i?"<svg>":"",d=c;for(let i=0;i<o;i++){const s=t[i];let o,u,p=-1,$=0;for(;$<s.length&&(d.lastIndex=$,u=d.exec(s),null!==u);)$=d.lastIndex,d===c?"!--"===u[1]?d=v:void 0!==u[1]?d=a:void 0!==u[2]?(g.test(u[2])&&(h=RegExp("</"+u[2],"g")),d=f):void 0!==u[3]&&(d=f):d===f?">"===u[0]?(d=null!=h?h:c,p=-1):void 0===u[1]?p=-2:(p=d.lastIndex-u[2].length,o=u[1],d=void 0===u[3]?f:'"'===u[3]?m:_):d===m||d===_?d=f:d===v||d===a?d=c:(d=f,h=void 0);const y=d===f&&t[i+1].startsWith("/>")?" ":"";r+=d===c?s+n$3:p>=0?(l.push(o),s.slice(0,p)+"$lit$"+s.slice(p)+e$3+y):s+e$3+(-2===p?(l.push(void 0),i):y);}const u=r+(t[o]||"<?>")+(2===i?"</svg>":"");if(!Array.isArray(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return [void 0!==s$1?s$1.createHTML(u):u,l]};class E{constructor({strings:t,_$litType$:s},n){let l;this.parts=[];let r=0,d=0;const u=t.length-1,c=this.parts,[v,a]=C(t,s);if(this.el=E.createElement(v,n),A.currentNode=this.el.content,2===s){const t=this.el.content,i=t.firstChild;i.remove(),t.append(...i.childNodes);}for(;null!==(l=A.nextNode())&&c.length<u;){if(1===l.nodeType){if(l.hasAttributes()){const t=[];for(const i of l.getAttributeNames())if(i.endsWith("$lit$")||i.startsWith(e$3)){const s=a[d++];if(t.push(i),void 0!==s){const t=l.getAttribute(s.toLowerCase()+"$lit$").split(e$3),i=/([.?@])?(.*)/.exec(s);c.push({type:1,index:r,name:i[2],strings:t,ctor:"."===i[1]?M:"?"===i[1]?H:"@"===i[1]?I:S});}else c.push({type:6,index:r});}for(const i of t)l.removeAttribute(i);}if(g.test(l.tagName)){const t=l.textContent.split(e$3),s=t.length-1;if(s>0){l.textContent=i$2?i$2.emptyScript:"";for(let i=0;i<s;i++)l.append(t[i],h()),A.nextNode(),c.push({type:2,index:++r});l.append(t[s],h());}}}else if(8===l.nodeType)if(l.data===o$2)c.push({type:2,index:r});else {let t=-1;for(;-1!==(t=l.data.indexOf(e$3,t+1));)c.push({type:7,index:r}),t+=e$3.length-1;}r++;}}static createElement(t,i){const s=l$2.createElement("template");return s.innerHTML=t,s}}function P(t,i,s=t,e){var o,n,l,h;if(i===b)return i;let d=void 0!==e?null===(o=s._$Cl)||void 0===o?void 0:o[e]:s._$Cu;const u=r(i)?void 0:i._$litDirective$;return (null==d?void 0:d.constructor)!==u&&(null===(n=null==d?void 0:d._$AO)||void 0===n||n.call(d,!1),void 0===u?d=void 0:(d=new u(t),d._$AT(t,s,e)),void 0!==e?(null!==(l=(h=s)._$Cl)&&void 0!==l?l:h._$Cl=[])[e]=d:s._$Cu=d),void 0!==d&&(i=P(t,d._$AS(t,i.values),d,e)),i}class V{constructor(t,i){this.v=[],this._$AN=void 0,this._$AD=t,this._$AM=i;}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}p(t){var i;const{el:{content:s},parts:e}=this._$AD,o=(null!==(i=null==t?void 0:t.creationScope)&&void 0!==i?i:l$2).importNode(s,!0);A.currentNode=o;let n=A.nextNode(),h=0,r=0,d=e[0];for(;void 0!==d;){if(h===d.index){let i;2===d.type?i=new N(n,n.nextSibling,this,t):1===d.type?i=new d.ctor(n,d.name,d.strings,this,t):6===d.type&&(i=new L(n,this,t)),this.v.push(i),d=e[++r];}h!==(null==d?void 0:d.index)&&(n=A.nextNode(),h++);}return o}m(t){let i=0;for(const s of this.v)void 0!==s&&(void 0!==s.strings?(s._$AI(t,s,i),i+=s.strings.length-2):s._$AI(t[i])),i++;}}class N{constructor(t,i,s,e){var o;this.type=2,this._$AH=w,this._$AN=void 0,this._$AA=t,this._$AB=i,this._$AM=s,this.options=e,this._$Cg=null===(o=null==e?void 0:e.isConnected)||void 0===o||o;}get _$AU(){var t,i;return null!==(i=null===(t=this._$AM)||void 0===t?void 0:t._$AU)&&void 0!==i?i:this._$Cg}get parentNode(){let t=this._$AA.parentNode;const i=this._$AM;return void 0!==i&&11===t.nodeType&&(t=i.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,i=this){t=P(this,t,i),r(t)?t===w||null==t||""===t?(this._$AH!==w&&this._$AR(),this._$AH=w):t!==this._$AH&&t!==b&&this.$(t):void 0!==t._$litType$?this.T(t):void 0!==t.nodeType?this.S(t):u(t)?this.A(t):this.$(t);}M(t,i=this._$AB){return this._$AA.parentNode.insertBefore(t,i)}S(t){this._$AH!==t&&(this._$AR(),this._$AH=this.M(t));}$(t){this._$AH!==w&&r(this._$AH)?this._$AA.nextSibling.data=t:this.S(l$2.createTextNode(t)),this._$AH=t;}T(t){var i;const{values:s,_$litType$:e}=t,o="number"==typeof e?this._$AC(t):(void 0===e.el&&(e.el=E.createElement(e.h,this.options)),e);if((null===(i=this._$AH)||void 0===i?void 0:i._$AD)===o)this._$AH.m(s);else {const t=new V(o,this),i=t.p(this.options);t.m(s),this.S(i),this._$AH=t;}}_$AC(t){let i=T.get(t.strings);return void 0===i&&T.set(t.strings,i=new E(t)),i}A(t){d(this._$AH)||(this._$AH=[],this._$AR());const i=this._$AH;let s,e=0;for(const o of t)e===i.length?i.push(s=new N(this.M(h()),this.M(h()),this,this.options)):s=i[e],s._$AI(o),e++;e<i.length&&(this._$AR(s&&s._$AB.nextSibling,e),i.length=e);}_$AR(t=this._$AA.nextSibling,i){var s;for(null===(s=this._$AP)||void 0===s||s.call(this,!1,!0,i);t&&t!==this._$AB;){const i=t.nextSibling;t.remove(),t=i;}}setConnected(t){var i;void 0===this._$AM&&(this._$Cg=t,null===(i=this._$AP)||void 0===i||i.call(this,t));}}class S{constructor(t,i,s,e,o){this.type=1,this._$AH=w,this._$AN=void 0,this.element=t,this.name=i,this._$AM=e,this.options=o,s.length>2||""!==s[0]||""!==s[1]?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=w;}get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}_$AI(t,i=this,s,e){const o=this.strings;let n=!1;if(void 0===o)t=P(this,t,i,0),n=!r(t)||t!==this._$AH&&t!==b,n&&(this._$AH=t);else {const e=t;let l,h;for(t=o[0],l=0;l<o.length-1;l++)h=P(this,e[s+l],i,l),h===b&&(h=this._$AH[l]),n||(n=!r(h)||h!==this._$AH[l]),h===w?t=w:t!==w&&(t+=(null!=h?h:"")+o[l+1]),this._$AH[l]=h;}n&&!e&&this.k(t);}k(t){t===w?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,null!=t?t:"");}}class M extends S{constructor(){super(...arguments),this.type=3;}k(t){this.element[this.name]=t===w?void 0:t;}}const k=i$2?i$2.emptyScript:"";class H extends S{constructor(){super(...arguments),this.type=4;}k(t){t&&t!==w?this.element.setAttribute(this.name,k):this.element.removeAttribute(this.name);}}class I extends S{constructor(t,i,s,e,o){super(t,i,s,e,o),this.type=5;}_$AI(t,i=this){var s;if((t=null!==(s=P(this,t,i,0))&&void 0!==s?s:w)===b)return;const e=this._$AH,o=t===w&&e!==w||t.capture!==e.capture||t.once!==e.once||t.passive!==e.passive,n=t!==w&&(e===w||o);o&&this.element.removeEventListener(this.name,this,e),n&&this.element.addEventListener(this.name,this,t),this._$AH=t;}handleEvent(t){var i,s;"function"==typeof this._$AH?this._$AH.call(null!==(s=null===(i=this.options)||void 0===i?void 0:i.host)&&void 0!==s?s:this.element,t):this._$AH.handleEvent(t);}}class L{constructor(t,i,s){this.element=t,this.type=6,this._$AN=void 0,this._$AM=i,this.options=s;}get _$AU(){return this._$AM._$AU}_$AI(t){P(this,t);}}const z=window.litHtmlPolyfillSupport;null==z||z(E,N),(null!==(t$2=globalThis.litHtmlVersions)&&void 0!==t$2?t$2:globalThis.litHtmlVersions=[]).push("2.1.3");
 
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */var l$1,o$1;class s extends d$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=A(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Do)||void 0===t||t.setConnected(!1);}render(){return x}}s.finalized=!0,s._$litElement$=!0,null===(l$1=globalThis.litElementHydrateSupport)||void 0===l$1||l$1.call(globalThis,{LitElement:s});const n$1=globalThis.litElementPolyfillSupport;null==n$1||n$1({LitElement:s});(null!==(o$1=globalThis.litElementVersions)&&void 0!==o$1?o$1:globalThis.litElementVersions=[]).push("3.2.2");
+ */var l$1,o$1;class s extends a$1{constructor(){super(...arguments),this.renderOptions={host:this},this._$Dt=void 0;}createRenderRoot(){var t,e;const i=super.createRenderRoot();return null!==(t=(e=this.renderOptions).renderBefore)&&void 0!==t||(e.renderBefore=i.firstChild),i}update(t){const i=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Dt=x(i,this.renderRoot,this.renderOptions);}connectedCallback(){var t;super.connectedCallback(),null===(t=this._$Dt)||void 0===t||t.setConnected(!0);}disconnectedCallback(){var t;super.disconnectedCallback(),null===(t=this._$Dt)||void 0===t||t.setConnected(!1);}render(){return b}}s.finalized=!0,s._$litElement$=!0,null===(l$1=globalThis.litElementHydrateSupport)||void 0===l$1||l$1.call(globalThis,{LitElement:s});const n$2=globalThis.litElementPolyfillSupport;null==n$2||n$2({LitElement:s});(null!==(o$1=globalThis.litElementVersions)&&void 0!==o$1?o$1:globalThis.litElementVersions=[]).push("3.1.2");
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -51,7 +51,7 @@ function __decorate(decorators, target, key, desc) {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const e$3=e=>n=>"function"==typeof n?((e,n)=>(customElements.define(e,n),n))(e,n):((e,n)=>{const{kind:t,elements:s}=n;return {kind:t,elements:s,finisher(n){customElements.define(e,n);}}})(e,n);
+const n$1=n=>e=>"function"==typeof e?((n,e)=>(window.customElements.define(n,e),e))(n,e):((n,e)=>{const{kind:t,elements:i}=e;return {kind:t,elements:i,finisher(e){window.customElements.define(n,e);}}})(n,e);
 
 /**
  * @license
@@ -83,13 +83,13 @@ const t={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},e
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */class e extends i{constructor(i){if(super(i),this.it=b,i.type!==t.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(r){if(r===b||null==r)return this._t=void 0,this.it=r;if(r===x)return r;if("string"!=typeof r)throw Error(this.constructor.directiveName+"() called with a non-string value");if(r===this.it)return this._t;this.it=r;const s=[r];return s.raw=s,this._t={_$litType$:this.constructor.resultType,strings:s,values:[]}}}e.directiveName="unsafeHTML",e.resultType=1;const o=e$1(e);
+ */class e extends i{constructor(i){if(super(i),this.it=w,i.type!==t.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(r){if(r===w||null==r)return this.vt=void 0,this.it=r;if(r===b)return r;if("string"!=typeof r)throw Error(this.constructor.directiveName+"() called with a non-string value");if(r===this.it)return this.vt;this.it=r;const s=[r];return s.raw=s,this.vt={_$litType$:this.constructor.resultType,strings:s,values:[]}}}e.directiveName="unsafeHTML",e.resultType=1;const o=e$1(e);
 
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const l=l=>null!=l?l:b;
+ */const l=l=>null!=l?l:w;
 
 var Module = void 0 !== Module ? Module : {};
 var TreeSitter = function() {
@@ -2218,7 +2218,7 @@ let BcDatalogEditor = class BcDatalogEditor extends s {
     render() {
         const rendered = this.renderText2(this.code, this._captures, this.marks);
         const rows = Math.max(this.code.split("\n").length, 1);
-        return y `<div id="wrapper">
+        return $ `<div id="wrapper">
       <textarea
         id="editing"
         rows=${rows}
@@ -2359,17 +2359,17 @@ ${this.code}</textarea
         return output;
     }
 };
-BcDatalogEditor.styles = i$3 `
+BcDatalogEditor.styles = r$2 `
     #wrapper {
       position: relative;
     }
 
     #editing,
     #highlighting {
-      margin: 10px;
+      margin: 0;
       padding: 10px;
       border: 0;
-      width: calc(100% - 32px);
+      width: calc(100% - 22px);
       overflow: auto;
       white-space: nowrap;
     }
@@ -2377,9 +2377,9 @@ BcDatalogEditor.styles = i$3 `
     #editing,
     #highlighting,
     #highlighting * {
-      font-size: 15pt;
+      font-size: var(--editor-font, 13px);
       font-family: monospace;
-      line-height: 20pt;
+      line-height: calc(var(--editor-font, 13px) * 1.3);
     }
 
     #highlighting {
@@ -2480,6 +2480,61 @@ BcDatalogEditor.styles = i$3 `
       color: var(--blue);
       font-weight: bold;
     }
+
+    @media (prefers-color-scheme: dark) {
+      :host {
+        --background: #0f1419;
+        --foreground: #bfbdb6;
+        --black: #131721;
+        --blue: #59c2ff;
+        --dark_gray: #2d3640;
+        --cyan: #73b8ff;
+        --gray: #5c6773;
+        --green: #aad94c;
+        --green-bg: rgba(170, 217, 76, 0.5);
+        --magenta: #d2a6ff;
+        --orange: #ff8f40;
+        --red: #f07178;
+        --red-bg: rgba(240, 113, 120, 0.5);
+        --yellow: #e6b450;
+      }
+      .comment {
+        color: var(--gray);
+        text-transform: italic;
+      }
+      .error {
+        color: var(--red);
+        font-weight: bold;
+      }
+      .hint {
+        color: var(--blue);
+        font-weight: bold;
+      }
+      .constant {
+        color: var(--magenta);
+      }
+      .function {
+        color: var(--yellow);
+      }
+      .keyword {
+        color: var(--orange);
+      }
+      .operator {
+        color: var(--orange);
+      }
+      .punctuation {
+        color: var(--foreground);
+      }
+      .string {
+        color: var(--green);
+      }
+      .variable {
+        color: var(--foreground);
+      }
+      .warning {
+        color: var(--yellow);
+      }
+    }
   `;
 __decorate([
     e$2()
@@ -2503,7 +2558,7 @@ __decorate([
     t$1()
 ], BcDatalogEditor.prototype, "_query", void 0);
 BcDatalogEditor = __decorate([
-    e$3("bc-datalog-editor")
+    n$1("bc-datalog-editor")
 ], BcDatalogEditor);
 function trimLines$1(str) {
     return str
@@ -2548,11 +2603,11 @@ class BcTokenEditor extends s {
         super.update(changedProperties);
     }
     render() {
-        return y `
+        return $ `
       <div>
         <button @click=${this._onAddBlock}>add block</button>
       </div>
-      ${this._blocks.map((block, index) => y `
+      ${this._blocks.map((block, index) => $ `
           <button @click=${() => this._onRemoveBlock(block)}>
             remove this block
           </button>
@@ -2571,7 +2626,7 @@ class BcTokenEditor extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -2595,12 +2650,12 @@ class BcTokenContent extends s {
     }
     render() {
         const content = this.content == null ? "no content yet" : this.content;
-        return y ` <div><pre>${content}</pre></div> `;
+        return $ ` <div><pre>${content}</pre></div> `;
     }
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -2640,7 +2695,7 @@ class BcAuthorizerEditor extends s {
         super.update(changedProperties);
     }
     render() {
-        return y `
+        return $ `
       <bc-datalog-editor
         code=${this.code}
         .marks=${this.markers.concat(this.parseErrors)}
@@ -2655,7 +2710,7 @@ class BcAuthorizerEditor extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -2715,14 +2770,14 @@ class BcAuthorizerContent extends s {
             }
             facts += fact.name + "(" + fact.terms + ");\n";
         }
-        return y ` <div>
+        return $ ` <div>
       <bc-datalog-editor code=${facts} readonly="true"></bc-datalog-editor>
     </div>`;
     }
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -2743,28 +2798,25 @@ var __wbg_star0 = /*#__PURE__*/Object.freeze({
 
 let wasm;
 
-const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
-
-cachedTextDecoder.decode();
-
-let cachedUint8Memory0 = new Uint8Array();
-
-function getUint8Memory0() {
-    if (cachedUint8Memory0.byteLength === 0) {
-        cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
-    }
-    return cachedUint8Memory0;
-}
-
-function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
-
-const heap = new Array(32).fill(undefined);
+const heap = new Array(128).fill(undefined);
 
 heap.push(undefined, null, true, false);
 
+function getObject(idx) { return heap[idx]; }
+
 let heap_next = heap.length;
+
+function dropObject(idx) {
+    if (idx < 132) return;
+    heap[idx] = heap_next;
+    heap_next = idx;
+}
+
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropObject(idx);
+    return ret;
+}
 
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
@@ -2775,11 +2827,18 @@ function addHeapObject(obj) {
     return idx;
 }
 
-function getObject(idx) { return heap[idx]; }
-
 let WASM_VECTOR_LEN = 0;
 
-const cachedTextEncoder = new TextEncoder('utf-8');
+let cachedUint8Memory0 = null;
+
+function getUint8Memory0() {
+    if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
+        cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachedUint8Memory0;
+}
+
+const cachedTextEncoder = (typeof TextEncoder !== 'undefined' ? new TextEncoder('utf-8') : { encode: () => { throw Error('TextEncoder not available') } } );
 
 const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
     ? function (arg, view) {
@@ -2798,14 +2857,14 @@ function passStringToWasm0(arg, malloc, realloc) {
 
     if (realloc === undefined) {
         const buf = cachedTextEncoder.encode(arg);
-        const ptr = malloc(buf.length);
+        const ptr = malloc(buf.length, 1) >>> 0;
         getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
         WASM_VECTOR_LEN = buf.length;
         return ptr;
     }
 
     let len = arg.length;
-    let ptr = malloc(len);
+    let ptr = malloc(len, 1) >>> 0;
 
     const mem = getUint8Memory0();
 
@@ -2821,7 +2880,7 @@ function passStringToWasm0(arg, malloc, realloc) {
         if (offset !== 0) {
             arg = arg.slice(offset);
         }
-        ptr = realloc(ptr, len, len = offset + arg.length * 3);
+        ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
         const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
         const ret = encodeString(arg, view);
 
@@ -2832,28 +2891,102 @@ function passStringToWasm0(arg, malloc, realloc) {
     return ptr;
 }
 
-let cachedInt32Memory0 = new Int32Array();
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+let cachedInt32Memory0 = null;
 
 function getInt32Memory0() {
-    if (cachedInt32Memory0.byteLength === 0) {
+    if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
         cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
     }
     return cachedInt32Memory0;
 }
 
-function dropObject(idx) {
-    if (idx < 36) return;
-    heap[idx] = heap_next;
-    heap_next = idx;
+const cachedTextDecoder = (typeof TextDecoder !== 'undefined' ? new TextDecoder('utf-8', { ignoreBOM: true, fatal: true }) : { decode: () => { throw Error('TextDecoder not available') } } );
+
+if (typeof TextDecoder !== 'undefined') { cachedTextDecoder.decode(); }
+function getStringFromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
 }
 
-function takeObject(idx) {
-    const ret = getObject(idx);
-    dropObject(idx);
-    return ret;
+let cachedFloat64Memory0 = null;
+
+function getFloat64Memory0() {
+    if (cachedFloat64Memory0 === null || cachedFloat64Memory0.byteLength === 0) {
+        cachedFloat64Memory0 = new Float64Array(wasm.memory.buffer);
+    }
+    return cachedFloat64Memory0;
 }
 
-let stack_pointer = 32;
+function debugString(val) {
+    // primitive types
+    const type = typeof val;
+    if (type == 'number' || type == 'boolean' || val == null) {
+        return  `${val}`;
+    }
+    if (type == 'string') {
+        return `"${val}"`;
+    }
+    if (type == 'symbol') {
+        const description = val.description;
+        if (description == null) {
+            return 'Symbol';
+        } else {
+            return `Symbol(${description})`;
+        }
+    }
+    if (type == 'function') {
+        const name = val.name;
+        if (typeof name == 'string' && name.length > 0) {
+            return `Function(${name})`;
+        } else {
+            return 'Function';
+        }
+    }
+    // objects
+    if (Array.isArray(val)) {
+        const length = val.length;
+        let debug = '[';
+        if (length > 0) {
+            debug += debugString(val[0]);
+        }
+        for(let i = 1; i < length; i++) {
+            debug += ', ' + debugString(val[i]);
+        }
+        debug += ']';
+        return debug;
+    }
+    // Test for built-in
+    const builtInMatches = /\[object ([^\]]+)\]/.exec(toString.call(val));
+    let className;
+    if (builtInMatches.length > 1) {
+        className = builtInMatches[1];
+    } else {
+        // Failed to match the standard '[object ClassName]'
+        return toString.call(val);
+    }
+    if (className == 'Object') {
+        // we're a user defined class or Object
+        // JSON.stringify avoids problems with cycles, and is generally much
+        // easier than looping through ownProperties of `val`.
+        try {
+            return 'Object(' + JSON.stringify(val) + ')';
+        } catch (_) {
+            return 'Object';
+        }
+    }
+    // errors
+    if (val instanceof Error) {
+        return `${val.name}: ${val.message}\n${val.stack}`;
+    }
+    // TODO we could test for more things here, like `Set`s and `Map`s.
+    return className;
+}
+
+let stack_pointer = 128;
 
 function addBorrowedObject(obj) {
     if (stack_pointer == 1) throw new Error('out of js stack');
@@ -2908,10 +3041,43 @@ function generate_keypair() {
 }
 
 /**
+* @param {string} private_key
+* @returns {string}
+*/
+function get_public_key(private_key) {
+    let deferred3_0;
+    let deferred3_1;
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(private_key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.get_public_key(retptr, ptr0, len0);
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        var r2 = getInt32Memory0()[retptr / 4 + 2];
+        var r3 = getInt32Memory0()[retptr / 4 + 3];
+        var ptr2 = r0;
+        var len2 = r1;
+        if (r3) {
+            ptr2 = 0; len2 = 0;
+            throw takeObject(r2);
+        }
+        deferred3_0 = ptr2;
+        deferred3_1 = len2;
+        return getStringFromWasm0(ptr2, len2);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+    }
+}
+
+/**
 * @param {any} query
 * @returns {string}
 */
 function generate_token(query) {
+    let deferred2_0;
+    let deferred2_1;
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         wasm.generate_token(retptr, addBorrowedObject(query));
@@ -2919,17 +3085,32 @@ function generate_token(query) {
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         var r2 = getInt32Memory0()[retptr / 4 + 2];
         var r3 = getInt32Memory0()[retptr / 4 + 3];
-        var ptr0 = r0;
-        var len0 = r1;
+        var ptr1 = r0;
+        var len1 = r1;
         if (r3) {
-            ptr0 = 0; len0 = 0;
+            ptr1 = 0; len1 = 0;
             throw takeObject(r2);
         }
-        return getStringFromWasm0(ptr0, len0);
+        deferred2_0 = ptr1;
+        deferred2_1 = len1;
+        return getStringFromWasm0(ptr1, len1);
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
         heap[stack_pointer++] = undefined;
-        wasm.__wbindgen_free(ptr0, len0);
+        wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+    }
+}
+
+/**
+* @param {any} query
+* @returns {any}
+*/
+function inspect_snapshot(query) {
+    try {
+        const ret = wasm.inspect_snapshot(addBorrowedObject(query));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
     }
 }
 
@@ -2954,11 +3135,7 @@ function handleError(f, args) {
     }
 }
 
-function getArrayU8FromWasm0(ptr, len) {
-    return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-}
-
-async function load(module, imports) {
+async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
         if (typeof WebAssembly.instantiateStreaming === 'function') {
             try {
@@ -2989,123 +3166,288 @@ async function load(module, imports) {
     }
 }
 
-function getImports() {
+function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
-        const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
-        return addHeapObject(ret);
+    imports.wbg.__wbindgen_is_undefined = function(arg0) {
+        const ret = getObject(arg0) === undefined;
+        return ret;
     };
-    imports.wbg.__wbindgen_json_serialize = function(arg0, arg1) {
-        const obj = getObject(arg1);
-        const ret = JSON.stringify(obj === undefined ? null : obj);
-        const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        getInt32Memory0()[arg0 / 4 + 1] = len0;
-        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    imports.wbg.__wbindgen_in = function(arg0, arg1) {
+        const ret = getObject(arg0) in getObject(arg1);
+        return ret;
     };
-    imports.wbg.__wbg_log_cef875d6a38f2a62 = function(arg0, arg1) {
-        console.log(getStringFromWasm0(arg0, arg1));
-    };
-    imports.wbg.__wbg_new_693216e109162396 = function() {
-        const ret = new Error();
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_stack_0ddaca5d1abfb52f = function(arg0, arg1) {
-        const ret = getObject(arg1).stack;
-        const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        getInt32Memory0()[arg0 / 4 + 1] = len0;
-        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-    };
-    imports.wbg.__wbg_error_09919627ac0992f5 = function(arg0, arg1) {
-        try {
-            console.error(getStringFromWasm0(arg0, arg1));
-        } finally {
-            wasm.__wbindgen_free(arg0, arg1);
-        }
+    imports.wbg.__wbindgen_is_object = function(arg0) {
+        const val = getObject(arg0);
+        const ret = typeof(val) === 'object' && val !== null;
+        return ret;
     };
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
+    };
+    imports.wbg.__wbindgen_object_clone_ref = function(arg0) {
+        const ret = getObject(arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
+        const obj = getObject(arg1);
+        const ret = typeof(obj) === 'string' ? obj : undefined;
+        var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len1 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len1;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr1;
+    };
+    imports.wbg.__wbg_log_1334384b2f424b35 = function(arg0, arg1) {
+        console.log(getStringFromWasm0(arg0, arg1));
+    };
+    imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
+        const ret = new Error();
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_stack_658279fe44541cf6 = function(arg0, arg1) {
+        const ret = getObject(arg1).stack;
+        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len1;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr1;
+    };
+    imports.wbg.__wbg_error_f851667af71bcfc6 = function(arg0, arg1) {
+        let deferred0_0;
+        let deferred0_1;
+        try {
+            deferred0_0 = arg0;
+            deferred0_1 = arg1;
+            console.error(getStringFromWasm0(arg0, arg1));
+        } finally {
+            wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
+        }
     };
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_debug_1dccd22b8a8988e1 = function(arg0, arg1, arg2, arg3) {
+    imports.wbg.__wbg_debug_9b8701f894da9929 = function(arg0, arg1, arg2, arg3) {
         console.debug(getObject(arg0), getObject(arg1), getObject(arg2), getObject(arg3));
     };
-    imports.wbg.__wbg_error_800b8d466653f7ea = function(arg0) {
+    imports.wbg.__wbg_error_788ae33f81d3b84b = function(arg0) {
         console.error(getObject(arg0));
     };
-    imports.wbg.__wbg_error_d539c0f5eafe6a31 = function(arg0, arg1, arg2, arg3) {
+    imports.wbg.__wbg_error_d9bce418caafb712 = function(arg0, arg1, arg2, arg3) {
         console.error(getObject(arg0), getObject(arg1), getObject(arg2), getObject(arg3));
     };
-    imports.wbg.__wbg_info_17d18b9f8eaab7d9 = function(arg0, arg1, arg2, arg3) {
+    imports.wbg.__wbg_info_bb52f40b06f679de = function(arg0, arg1, arg2, arg3) {
         console.info(getObject(arg0), getObject(arg1), getObject(arg2), getObject(arg3));
     };
-    imports.wbg.__wbg_log_f286f3fe4aad906d = function(arg0, arg1, arg2, arg3) {
+    imports.wbg.__wbg_log_ea7093e35e3efd07 = function(arg0, arg1, arg2, arg3) {
         console.log(getObject(arg0), getObject(arg1), getObject(arg2), getObject(arg3));
     };
-    imports.wbg.__wbg_warn_3d6689f77cb29c86 = function(arg0, arg1, arg2, arg3) {
+    imports.wbg.__wbg_warn_dfc0e0cf544a13bd = function(arg0, arg1, arg2, arg3) {
         console.warn(getObject(arg0), getObject(arg1), getObject(arg2), getObject(arg3));
     };
-    imports.wbg.__wbindgen_is_undefined = function(arg0) {
-        const ret = getObject(arg0) === undefined;
+    imports.wbg.__wbindgen_number_get = function(arg0, arg1) {
+        const obj = getObject(arg1);
+        const ret = typeof(obj) === 'number' ? obj : undefined;
+        getFloat64Memory0()[arg0 / 8 + 1] = isLikeNone(ret) ? 0 : ret;
+        getInt32Memory0()[arg0 / 4 + 0] = !isLikeNone(ret);
+    };
+    imports.wbg.__wbindgen_jsval_loose_eq = function(arg0, arg1) {
+        const ret = getObject(arg0) == getObject(arg1);
         return ret;
     };
-    imports.wbg.__wbg_self_86b4b13392c7af56 = function() { return handleError(function () {
-        const ret = self.self;
+    imports.wbg.__wbindgen_boolean_get = function(arg0) {
+        const v = getObject(arg0);
+        const ret = typeof(v) === 'boolean' ? (v ? 1 : 0) : 2;
+        return ret;
+    };
+    imports.wbg.__wbindgen_error_new = function(arg0, arg1) {
+        const ret = new Error(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);
-    }, arguments) };
-    imports.wbg.__wbg_crypto_b8c92eaac23d0d80 = function(arg0) {
+    };
+    imports.wbg.__wbindgen_number_new = function(arg0) {
+        const ret = arg0;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_bigint_from_u64 = function(arg0) {
+        const ret = BigInt.asUintN(64, arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_bigint_from_u128 = function(arg0, arg1) {
+        const ret = BigInt.asUintN(64, arg0) << BigInt(64) | BigInt.asUintN(64, arg1);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_getwithrefkey_15c62c2b8546208d = function(arg0, arg1) {
+        const ret = getObject(arg0)[getObject(arg1)];
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_set_20cbc34131e76824 = function(arg0, arg1, arg2) {
+        getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
+    };
+    imports.wbg.__wbg_crypto_c48a774b022d20ac = function(arg0) {
         const ret = getObject(arg0).crypto;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_msCrypto_9ad6677321a08dd8 = function(arg0) {
+    imports.wbg.__wbg_process_298734cf255a885d = function(arg0) {
+        const ret = getObject(arg0).process;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_versions_e2e78e134e3e5d01 = function(arg0) {
+        const ret = getObject(arg0).versions;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_node_1cd7a5d853dbea79 = function(arg0) {
+        const ret = getObject(arg0).node;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_is_string = function(arg0) {
+        const ret = typeof(getObject(arg0)) === 'string';
+        return ret;
+    };
+    imports.wbg.__wbg_require_8f08ceecec0f4fee = function() { return handleError(function () {
+        const ret = module.require;
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_msCrypto_bcb970640f50a1e8 = function(arg0) {
         const ret = getObject(arg0).msCrypto;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_require_f5521a5b85ad2542 = function(arg0, arg1, arg2) {
-        const ret = getObject(arg0).require(getStringFromWasm0(arg1, arg2));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_getRandomValues_dd27e6b0652b3236 = function(arg0) {
-        const ret = getObject(arg0).getRandomValues;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_randomFillSync_d2ba53160aec6aba = function(arg0, arg1, arg2) {
-        getObject(arg0).randomFillSync(getArrayU8FromWasm0(arg1, arg2));
-    };
-    imports.wbg.__wbg_getRandomValues_e57c9b75ddead065 = function(arg0, arg1) {
+    imports.wbg.__wbg_randomFillSync_dc1e9a60c158336d = function() { return handleError(function (arg0, arg1) {
+        getObject(arg0).randomFillSync(takeObject(arg1));
+    }, arguments) };
+    imports.wbg.__wbg_getRandomValues_37fa2ca9e4e07fab = function() { return handleError(function (arg0, arg1) {
         getObject(arg0).getRandomValues(getObject(arg1));
+    }, arguments) };
+    imports.wbg.__wbindgen_is_function = function(arg0) {
+        const ret = typeof(getObject(arg0)) === 'function';
+        return ret;
     };
-    imports.wbg.__wbg_static_accessor_MODULE_452b4680e8614c81 = function() {
-        const ret = module;
+    imports.wbg.__wbg_self_1ff1d729e9aae938 = function() { return handleError(function () {
+        const ret = self.self;
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_window_5f4faef6c12b79ec = function() { return handleError(function () {
+        const ret = window.window;
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_globalThis_1d39714405582d3c = function() { return handleError(function () {
+        const ret = globalThis.globalThis;
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_global_651f05c6a0944d1c = function() { return handleError(function () {
+        const ret = global.global;
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_newnoargs_581967eacc0e2604 = function(arg0, arg1) {
+        const ret = new Function(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_buffer_34f5ec9f8a838ba0 = function(arg0) {
-        const ret = getObject(arg0).buffer;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_new_cda198d9dbc6d7ea = function(arg0) {
-        const ret = new Uint8Array(getObject(arg0));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_newwithlength_66e5530e7079ea1b = function(arg0) {
-        const ret = new Uint8Array(arg0 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_subarray_270ff8dd5582c1ac = function(arg0, arg1, arg2) {
-        const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_length_51f19f73d6d9eff3 = function(arg0) {
+    imports.wbg.__wbg_length_fff51ee6522a1a18 = function(arg0) {
         const ret = getObject(arg0).length;
         return ret;
     };
-    imports.wbg.__wbg_set_1a930cfcda1a8067 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_new_898a68150f225f2e = function() {
+        const ret = new Array();
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_next_526fc47e980da008 = function(arg0) {
+        const ret = getObject(arg0).next;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_value_1695675138684bd5 = function(arg0) {
+        const ret = getObject(arg0).value;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_iterator_97f0c81209c6c35a = function() {
+        const ret = Symbol.iterator;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_new_b51585de1b234aff = function() {
+        const ret = new Object();
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_get_44be0491f933a435 = function(arg0, arg1) {
+        const ret = getObject(arg0)[arg1 >>> 0];
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_set_502d29070ea18557 = function(arg0, arg1, arg2) {
+        getObject(arg0)[arg1 >>> 0] = takeObject(arg2);
+    };
+    imports.wbg.__wbg_isArray_4c24b343cb13cfb1 = function(arg0) {
+        const ret = Array.isArray(getObject(arg0));
+        return ret;
+    };
+    imports.wbg.__wbg_instanceof_ArrayBuffer_39ac22089b74fddb = function(arg0) {
+        let result;
+        try {
+            result = getObject(arg0) instanceof ArrayBuffer;
+        } catch {
+            result = false;
+        }
+        const ret = result;
+        return ret;
+    };
+    imports.wbg.__wbg_call_cb65541d95d71282 = function() { return handleError(function (arg0, arg1) {
+        const ret = getObject(arg0).call(getObject(arg1));
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_call_01734de55d61e11d = function() { return handleError(function (arg0, arg1, arg2) {
+        const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_next_ddb3312ca1c4e32a = function() { return handleError(function (arg0) {
+        const ret = getObject(arg0).next();
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_done_5c1f01fb660d73b5 = function(arg0) {
+        const ret = getObject(arg0).done;
+        return ret;
+    };
+    imports.wbg.__wbg_get_97b561fb56f034b5 = function() { return handleError(function (arg0, arg1) {
+        const ret = Reflect.get(getObject(arg0), getObject(arg1));
+        return addHeapObject(ret);
+    }, arguments) };
+    imports.wbg.__wbg_buffer_085ec1f694018c4f = function(arg0) {
+        const ret = getObject(arg0).buffer;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_newwithbyteoffsetandlength_6da8e527659b86aa = function(arg0, arg1, arg2) {
+        const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_new_8125e318e6245eed = function(arg0) {
+        const ret = new Uint8Array(getObject(arg0));
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_instanceof_Uint8Array_d8d9cb2b8e8ac1d4 = function(arg0) {
+        let result;
+        try {
+            result = getObject(arg0) instanceof Uint8Array;
+        } catch {
+            result = false;
+        }
+        const ret = result;
+        return ret;
+    };
+    imports.wbg.__wbg_newwithlength_e5d69174d6984cd7 = function(arg0) {
+        const ret = new Uint8Array(arg0 >>> 0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_subarray_13db269f57aa838d = function(arg0, arg1, arg2) {
+        const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_length_72e2208bbc0efc61 = function(arg0) {
+        const ret = getObject(arg0).length;
+        return ret;
+    };
+    imports.wbg.__wbg_set_5cf90238115182c3 = function(arg0, arg1, arg2) {
         getObject(arg0).set(getObject(arg1), arg2 >>> 0);
+    };
+    imports.wbg.__wbindgen_debug_string = function(arg0, arg1) {
+        const ret = debugString(getObject(arg1));
+        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len1;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr1;
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
@@ -3114,34 +3456,37 @@ function getImports() {
         const ret = wasm.memory;
         return addHeapObject(ret);
     };
-    imports['./snippets/biscuit-auth-e52d23e03c1c6188/inline0.js'] = __wbg_star0;
+    imports['./snippets/biscuit-auth-e5319c95bbe1e260/inline0.js'] = __wbg_star0;
 
     return imports;
 }
 
-function finalizeInit(instance, module) {
+function __wbg_finalize_init(instance, module) {
     wasm = instance.exports;
-    init.__wbindgen_wasm_module = module;
-    cachedInt32Memory0 = new Int32Array();
-    cachedUint8Memory0 = new Uint8Array();
+    __wbg_init.__wbindgen_wasm_module = module;
+    cachedFloat64Memory0 = null;
+    cachedInt32Memory0 = null;
+    cachedUint8Memory0 = null;
 
     wasm.__wbindgen_start();
     return wasm;
 }
 
-async function init(input) {
+async function __wbg_init(input) {
+    if (wasm !== undefined) return wasm;
+
     if (typeof input === 'undefined') {
-        input = new URL(new URL('assets/biscuit_bg-fda15ca5.wasm', import.meta.url).href, import.meta.url);
+        input = new URL(new URL('assets/biscuit_bg-492d400e.wasm', import.meta.url).href, import.meta.url);
     }
-    const imports = getImports();
+    const imports = __wbg_get_imports();
 
     if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
         input = fetch(input);
     }
 
-    const { instance, module } = await load(await input, imports);
+    const { instance, module } = await __wbg_load(await input, imports);
 
-    return finalizeInit(instance, module);
+    return __wbg_finalize_init(instance, module);
 }
 
 /**
@@ -3152,37 +3497,46 @@ let BcAuthorizerResult = class BcAuthorizerResult extends s {
         var _a, _b, _c, _d;
         const failedChecksCount = (_d = (_b = (_a = e.Unauthorized) === null || _a === void 0 ? void 0 : _a.checks.length) !== null && _b !== void 0 ? _b : (_c = e.NoMatchingPolicy) === null || _c === void 0 ? void 0 : _c.checks.length) !== null && _d !== void 0 ? _d : 0;
         const failedChecks = failedChecksCount > 0
-            ? y `<pre>${failedChecksCount} failed checks</pre>`
+            ? $ `<pre>${failedChecksCount} failed checks</pre>`
             : null;
         let policyError;
         if (e.NoMatchingPolicy) {
-            policyError = y `<pre>No policy matched</pre>`;
+            policyError = $ `<pre>No policy matched</pre>`;
         }
         else if (e.Unauthorized && e.Unauthorized.policy.Deny !== undefined) {
-            policyError = y `<pre>A deny policy matched</pre>`;
+            policyError = $ `<pre>A deny policy matched</pre>`;
         }
-        return y `<div>${failedChecks} ${policyError}</div>`;
+        return $ `<div>${failedChecks} ${policyError}</div>`;
     }
     renderResult() {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
         const logicError = (_d = (_c = (_b = (_a = this.content) === null || _a === void 0 ? void 0 : _a.Ok) === null || _b === void 0 ? void 0 : _b.authorizer_result) === null || _c === void 0 ? void 0 : _c.Err) === null || _d === void 0 ? void 0 : _d.FailedLogic;
-        const success = ((_g = (_f = (_e = this.content) === null || _e === void 0 ? void 0 : _e.Ok) === null || _f === void 0 ? void 0 : _f.authorizer_result) === null || _g === void 0 ? void 0 : _g.Ok) !== undefined;
+        const parsingError = (_f = (_e = this.content) === null || _e === void 0 ? void 0 : _e.Err) === null || _f === void 0 ? void 0 : _f.token;
+        const publicKeyError = (_h = (_g = this.content) === null || _g === void 0 ? void 0 : _g.Err) === null || _h === void 0 ? void 0 : _h.root_key;
+        const success = ((_l = (_k = (_j = this.content) === null || _j === void 0 ? void 0 : _j.Ok) === null || _k === void 0 ? void 0 : _k.authorizer_result) === null || _l === void 0 ? void 0 : _l.Ok) !== undefined;
         if (success) {
-            return y `<div><pre>Success</pre></div>`;
+            return $ `<div><pre>Success</pre></div>`;
         }
         else if (logicError) {
             return this.renderLogicError(logicError);
         }
-        else if ((_h = this.content) === null || _h === void 0 ? void 0 : _h.Err) {
-            return y `<div><pre>Datalog execution error</pre></div>`;
+        else if (publicKeyError) {
+            return $ `<div><pre>Public key parsing error</pre></div>`;
+        }
+        else if (parsingError) {
+            return $ `<div><pre>Token parsing error</pre></div>`;
+        }
+        else if ((_m = this.content) === null || _m === void 0 ? void 0 : _m.Err) {
+            return $ `<div><pre>Datalog execution error</pre></div>`;
         }
         else {
-            return y `<div><pre>Unknown error</pre></div>`;
+            console.error(this.content);
+            return $ `<div><pre>Unknown error</pre></div>`;
         }
     }
     render() {
         if (this.content === null) {
-            return y ` <div><pre>no result yet</pre></div> `;
+            return $ ` <div><pre>no result yet</pre></div> `;
         }
         else {
             return this.renderResult();
@@ -3191,7 +3545,7 @@ let BcAuthorizerResult = class BcAuthorizerResult extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -3203,14 +3557,14 @@ __decorate([
     e$2({ type: Object })
 ], BcAuthorizerResult.prototype, "content", void 0);
 BcAuthorizerResult = __decorate([
-    e$3("bc-authorizer-result")
+    n$1("bc-authorizer-result")
 ], BcAuthorizerResult);
 
 let loadPromise = null;
 async function initialize() {
     if (loadPromise == null) {
         console.log("will create wasm promise");
-        loadPromise = init();
+        loadPromise = __wbg_init();
     }
     console.log("returning wasm promise");
     return loadPromise;
@@ -3330,7 +3684,7 @@ class BcAuthorizerExample extends s {
                 }
             }
         }
-        return y `
+        return $ `
       <bc-authorizer-editor
         code="${this.code}"
         parseErrors="${JSON.stringify(parseErrors)}"
@@ -3354,7 +3708,7 @@ class BcAuthorizerExample extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -3409,7 +3763,6 @@ class BcDatalogExample extends s {
                 query: "",
             };
             var result = execute(state);
-            result.authorizer_result;
             authorizer_world = result.authorizer_world;
             if (result.authorizer_editor != null) {
                 for (let error of result.authorizer_editor.errors) {
@@ -3432,7 +3785,7 @@ class BcDatalogExample extends s {
                 }
             }
         }
-        return y `
+        return $ `
       <bc-authorizer-editor
         code="${this.code}"
         parseErrors="${JSON.stringify(parseErrors)}"
@@ -3452,7 +3805,7 @@ class BcDatalogExample extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: block;
         }
@@ -3513,7 +3866,7 @@ class BcFullExample extends s {
         var _a, _b, _c, _d;
         console.log("render0");
         if (!this._started) {
-            return y ``;
+            return $ ``;
         }
         console.log(this.blocks);
         let blocks = [];
@@ -3581,10 +3934,10 @@ class BcFullExample extends s {
         }
         authorizer_world = (_b = (_a = result.Ok) === null || _a === void 0 ? void 0 : _a.authorizer_world) !== null && _b !== void 0 ? _b : [];
         (_d = (_c = result.Ok) === null || _c === void 0 ? void 0 : _c.authorizer_result) !== null && _d !== void 0 ? _d : null;
-        return y `
+        return $ `
       <div class="blocks">
         <p>Token</p>
-        ${this.blocks.map((block, index) => y `
+        ${this.blocks.map((block, index) => $ `
             <p>Block ${index}</p>
             <bc-datalog-editor
               code=${block.code}
@@ -3625,7 +3978,7 @@ class BcFullExample extends s {
     static get styles() {
         return [
             // language=CSS
-            i$3 `
+            r$2 `
         :host {
           display: flex;
           flex-direction: column;
@@ -3814,7 +4167,7 @@ let BCDatalogPlayground = class BCDatalogPlayground extends s {
             parseErrors.blocks =
                 (_k = (_j = authorizerResult.Err) === null || _j === void 0 ? void 0 : _j.blocks.map((b) => b.map(convertError))) !== null && _k !== void 0 ? _k : [];
         }
-        return y `
+        return $ `
       ${this.renderBlocks(markers.blocks, parseErrors.blocks)}
       ${this.renderAuthorizer(markers.authorizer, parseErrors.authorizer)}
       <p>Result</p>
@@ -3829,7 +4182,7 @@ let BCDatalogPlayground = class BCDatalogPlayground extends s {
     renderExternalKeyInput(blockId) {
         if (blockId <= 0)
             return;
-        return y `
+        return $ `
       <input
         @input=${(e) => this.onUpdatedExternalKey(blockId, e)}
         value=${this.blocks[blockId].externalKey}
@@ -3837,7 +4190,7 @@ let BCDatalogPlayground = class BCDatalogPlayground extends s {
     `;
     }
     renderBlock(blockId, code, markers = [], errors = []) {
-        return y ` <p>
+        return $ ` <p>
         ${blockId == 0 ? "Authority block" : "Block " + blockId}:
         ${this.renderExternalKeyInput(blockId)}
       </p>
@@ -3852,7 +4205,7 @@ let BCDatalogPlayground = class BCDatalogPlayground extends s {
     renderBlocks(markers, errors) {
         if (!this.showBlocks)
             return;
-        return y `
+        return $ `
       ${this.blocks.map(({ code }, id) => {
             return this.renderBlock(id, code, markers[id], errors[id]);
         })}
@@ -3860,7 +4213,7 @@ let BCDatalogPlayground = class BCDatalogPlayground extends s {
     `;
     }
     renderAuthorizer(markers, parseErrors) {
-        return y ` <p>Authorizer</p>
+        return $ ` <p>Authorizer</p>
       <bc-datalog-editor
         code=${this.code}
         @bc-datalog-editor:update=${this.onUpdatedCode}
@@ -3882,7 +4235,7 @@ __decorate([
     t$1()
 ], BCDatalogPlayground.prototype, "started", void 0);
 BCDatalogPlayground = __decorate([
-    e$3("bc-datalog-playground")
+    n$1("bc-datalog-playground")
 ], BCDatalogPlayground);
 
 /**
@@ -3890,7 +4243,7 @@ BCDatalogPlayground = __decorate([
  */
 let BcTokenPrinter = class BcTokenPrinter extends s {
     constructor() {
-        var _a, _b;
+        var _a;
         super();
         this.biscuit = "";
         this.readonly = false;
@@ -3902,7 +4255,7 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
         this._started = false;
         const authorizerChild = this.querySelector(".authorizer");
         if (authorizerChild !== null) {
-            this.authorizer = (_b = (_a = authorizerChild.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : "";
+            this.authorizer = trimLines((_a = authorizerChild.textContent) !== null && _a !== void 0 ? _a : "");
         }
     }
     firstUpdated() {
@@ -3933,14 +4286,14 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
     }
     renderTokenInput() {
         if (this.readonly) {
-            return y `
+            return $ `
         <div class="code">
           <p>Encoded token</p>
           <code>${this.biscuit}</code>
         </div>
       `;
         }
-        return y `
+        return $ `
       <div class="code">
         <p>Encoded token</p>
         <textarea @input=${this._onUpdatedToken}>${this.biscuit}</textarea>
@@ -3948,7 +4301,7 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
     `;
     }
     renderNotStarted() {
-        return y `
+        return $ `
       <div class="token">
         ${this.renderTokenInput()}
         <div class="content">loading biscuit token</div>
@@ -3956,31 +4309,31 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
     `;
     }
     renderEmptyToken() {
-        return y `
+        return $ `
       ${this.renderTokenInput()}
       <div class="content">Please enter a base64-encoded token</div>
     `;
     }
     renderResult(error, blocks, blockMarkers) {
         if (this.biscuit === "") {
-            return y `
+            return $ `
         ${this.renderTokenInput()}
         <div class="content">Please enter a base64-encoded token</div>
       `;
         }
         if (error) {
-            return y `
+            return $ `
         ${this.renderTokenInput()}
         <div class="content">${error}</div>
       `;
         }
-        return y `
+        return $ `
       ${this.renderTokenInput()}
       <div class="content">
         <p>Decoded token</p>
         ${blocks.map((block, index) => {
             var _a, _b;
-            return y `
+            return $ `
         <div>
         <p>${index === 0 ? "Authority block" : `Block ${index}`}:</p>
         <p class="revocation-id">Revocation id: <span class="id">${block.revocation_id}</span></p>
@@ -4002,7 +4355,7 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
             return;
         const markers = (_b = (_a = result.Ok) === null || _a === void 0 ? void 0 : _a.authorizer_editor.markers) !== null && _b !== void 0 ? _b : [];
         const errors = (_d = (_c = result.Err) === null || _c === void 0 ? void 0 : _c.authorizer) !== null && _d !== void 0 ? _d : [];
-        return y `
+        return $ `
       <div class="code">
         <p class="public-key-input">
           <label for="public-key">Public key</label>
@@ -4023,13 +4376,24 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
       </div>
       <div class="content">
         <p>Result</p>
-        <bc-authorizer-result .content=${result}> </bc-authorizer-result>
+        ${this.renderAuthorizerResult(result)}
       </div>
     `;
     }
+    renderAuthorizerResult(result) {
+        if (this.biscuit === "") {
+            return $ `<div><pre>Please enter a base64-encoded token</pre></div>`;
+        }
+        if (this.rootPublicKey === "") {
+            return $ `<div><pre>Please enter a public key</pre></div>`;
+        }
+        return $ `<bc-authorizer-result
+      .content=${result}
+    ></bc-authorizer-result>`;
+    }
     renderExtraBlock(blockId, errors = [], blocksOffset) {
         var _a;
-        return y `
+        return $ `
       <p>${"Block " + (blocksOffset + blockId)}:</p>
       <bc-datalog-editor
         code="${(_a = this.extraBlocks[blockId]) !== null && _a !== void 0 ? _a : ""}"
@@ -4062,11 +4426,17 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
                 "Please correct the datalog input on the following blocks: " +
                     blockList;
         }
-        const attenuated = (_d = result.Ok) !== null && _d !== void 0 ? _d : errorMessage;
-        return y `
+        let attenuated;
+        if (this.biscuit == "") {
+            attenuated = $ `Please enter a base64-encoded token`;
+        }
+        else {
+            attenuated = (_d = result.Ok) !== null && _d !== void 0 ? _d : errorMessage;
+        }
+        return $ `
       <div class="code">
         <p>Extra blocks</p>
-        ${this.extraBlocks.map((code, id) => {
+        ${this.extraBlocks.map((_, id) => {
             var _a, _b, _c;
             const blockErrors = (_c = (_b = (_a = result.Err) === null || _a === void 0 ? void 0 : _a.BlockParseErrors) === null || _b === void 0 ? void 0 : _b.blocks[id]) !== null && _c !== void 0 ? _c : [];
             return this.renderExtraBlock(id, blockErrors, blocksOffset);
@@ -4099,7 +4469,7 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
         const blockMarkers = (_b = (_a = authorizerResult.Ok) === null || _a === void 0 ? void 0 : _a.token_blocks.map((b) => b.markers.map(convertMarker))) !== null && _b !== void 0 ? _b : [];
         // Extra blocks numbers are offset by the amount of blocks already in the token
         const blocksOffset = blocks.length;
-        return y `
+        return $ `
       <div class="row">
         ${this.renderResult(parseResult.error, blocks, this.showAuthorizer ? blockMarkers : [])}
       </div>
@@ -4108,7 +4478,7 @@ let BcTokenPrinter = class BcTokenPrinter extends s {
     `;
     }
 };
-BcTokenPrinter.styles = i$3 `
+BcTokenPrinter.styles = r$2 `
     .row {
       display: flex;
       flex-direction: column;
@@ -4240,7 +4610,7 @@ __decorate([
     t$1()
 ], BcTokenPrinter.prototype, "_started", void 0);
 BcTokenPrinter = __decorate([
-    e$3("bc-token-printer")
+    n$1("bc-token-printer")
 ], BcTokenPrinter);
 
 /**
@@ -4250,10 +4620,7 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
     constructor() {
         super();
         this.privateKey = "";
-        this._publicKey = "";
-        this._blocks = [
-            { code: "", externalKey: null },
-        ];
+        this._blocks = [];
         this._started = false;
         console.log("constructor");
         const blockChildren = this.querySelectorAll(".block");
@@ -4269,6 +4636,9 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
             return { code, externalKey };
         })
             .filter(({ code }, i) => i === 0 || code !== "");
+        if (this._blocks.length === 0) {
+            this._blocks = [{ code: "", externalKey: null }];
+        }
     }
     firstUpdated() {
         initialize().then(() => (this._started = true));
@@ -4290,9 +4660,8 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
         this._blocks = newBlocks;
     }
     generateKey() {
-        const { public_key, private_key } = generate_keypair();
+        const { private_key } = generate_keypair();
         this.privateKey = private_key;
-        this._publicKey = public_key;
     }
     addBlock() {
         const newBlocks = [...this._blocks];
@@ -4300,25 +4669,21 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
         this._blocks = newBlocks;
     }
     renderNotStarted() {
-        return y `
+        return $ `
       <div class="row">
         <div class="content">loading biscuit generator</div>
       </div>
     `;
     }
     renderKeyInput() {
-        return y `
+        const publicKey = this.privateKey && get_public_key(this.privateKey);
+        return $ `
       <div class="row">
         <p>
           <label for="private-key">Private key</label>
           <input id="private-key" value="${this.privateKey}" /><br />
           <label for="public-key">Public key</label>
-          <input
-            id="public-key"
-            value="${this._publicKey}"
-            readonly
-            disabled
-          /><br />
+          <input id="public-key" value="${publicKey}" readonly disabled /><br />
           <button @click=${this.generateKey}>Generate key</button>
         </p>
       </div>
@@ -4327,14 +4692,14 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
     renderBlockKeyInput(blockId) {
         if (blockId <= 0)
             return;
-        return y `<input
+        return $ `<input
       @input=${(e) => this._onUpdatedBlockKey(blockId, e)}
       placeholder="Third party private key"
     />`;
     }
     renderBlock(blockId, errors = []) {
         var _a, _b;
-        return y `
+        return $ `
       <p>${blockId == 0 ? "Authority block" : "Block " + blockId}:</p>
       ${this.renderBlockKeyInput(blockId)}
       <bc-datalog-editor
@@ -4387,7 +4752,7 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
                     blockList;
         }
         const token = (_j = result.Ok) !== null && _j !== void 0 ? _j : errorMessage;
-        return y `
+        return $ `
       <div class="row">
         <div class="code">
           ${this.renderKeyInput()}
@@ -4406,7 +4771,7 @@ let BcTokenGenerator = class BcTokenGenerator extends s {
     `;
     }
 };
-BcTokenGenerator.styles = i$3 `
+BcTokenGenerator.styles = r$2 `
     .row {
       display: flex;
       flex-direction: column;
@@ -4492,21 +4857,297 @@ __decorate([
 ], BcTokenGenerator.prototype, "privateKey", void 0);
 __decorate([
     t$1()
-], BcTokenGenerator.prototype, "_publicKey", void 0);
-__decorate([
-    t$1()
 ], BcTokenGenerator.prototype, "_blocks", void 0);
 __decorate([
     t$1()
 ], BcTokenGenerator.prototype, "_started", void 0);
 BcTokenGenerator = __decorate([
-    e$3("bc-token-generator")
+    n$1("bc-token-generator")
 ], BcTokenGenerator);
+
+/**
+ * TODO DOCS
+ */
+let BcSnapshotPrinter = class BcSnapshotPrinter extends s {
+    constructor() {
+        var _a;
+        super();
+        this.snapshot = "";
+        this.readonly = false;
+        this.showAuthorizer = false;
+        this.showQuery = false;
+        this.authorizer = "";
+        this.query = "";
+        this._started = false;
+        const authorizerChild = this.querySelector(".authorizer");
+        if (authorizerChild !== null) {
+            this.authorizer = trimLines((_a = authorizerChild.textContent) !== null && _a !== void 0 ? _a : "");
+        }
+    }
+    firstUpdated() {
+        initialize().then(() => (this._started = true));
+    }
+    _onUpdatedSnapshot(e) {
+        if (this.readonly)
+            return;
+        this.snapshot = e.target.value.trim();
+    }
+    _onUpdatedQuery(e) {
+        if (!this.showQuery)
+            return;
+        this.query = e.detail.code;
+    }
+    _onUpdatedAuthorizer(e) {
+        if (!this.showAuthorizer)
+            return;
+        this.authorizer = e.detail.code;
+    }
+    renderSnapshotInput() {
+        if (this.readonly) {
+            return $ `
+        <div class="code">
+          <p>Encoded snapshot</p>
+          <code>${this.snapshot}</code>
+        </div>
+      `;
+        }
+        return $ `
+      <div class="code">
+        <p>Encoded snapshot</p>
+        <textarea @input=${this._onUpdatedSnapshot}>${this.snapshot}</textarea>
+      </div>
+    `;
+    }
+    renderNotStarted() {
+        return $ `
+      <div class="snapshot">
+        ${this.renderSnapshotInput()}
+        <div class="content">loading biscuit snapshot</div>
+      </div>
+    `;
+    }
+    renderEmptyToken() {
+        return $ `
+      ${this.renderSnapshotInput()}
+      <div class="content">Please enter a base64-encoded snapshot</div>
+    `;
+    }
+    renderResult(result) {
+        if (this.snapshot === "") {
+            return $ `
+        ${this.renderSnapshotInput()}
+        <div class="content">Please enter a base64-encoded snapshot</div>
+      `;
+        }
+        if (result.snapshot.Err) {
+            return $ `
+        ${this.renderSnapshotInput()}
+        <div class="content">${result.snapshot.Err}</div>
+      `;
+        }
+        const { code, elapsed_micros, iterations, authorization_result, query_result, } = result.snapshot.Ok;
+        const auth_res = {
+            Ok: {
+                authorizer_editor: { markers: [] },
+                authorizer_result: authorization_result,
+                authorizer_world: [],
+                token_blocks: [],
+            },
+        };
+        return $ `
+      ${this.renderSnapshotInput()}
+      <div class="content">
+        <p>Elapsed time: ${elapsed_micros.toString()}μs</p>
+        <p>Iterations: ${iterations}</p>
+        <p>Snapshot contents</p>
+        <bc-datalog-editor code=${code} .marks=${[]} readonly="true">
+        </bc-datalog-editor>
+        ${this.renderAuthorizerInput()}
+        <bc-authorizer-result .content=${auth_res}></bc-authorizer-result>
+        ${this.renderQueryInput()}
+        ${query_result && this.renderQueryResult(query_result)}
+      </div>
+    `;
+    }
+    renderAuthorizerInput() {
+        if (!this.showAuthorizer)
+            return;
+        return $ `
+      <p>Extra authorizer code</p>
+      <bc-datalog-editor
+        @bc-datalog-editor:update=${(e) => this._onUpdatedAuthorizer(e)}
+      >
+      </bc-datalog-editor>
+    `;
+    }
+    renderQueryInput() {
+        if (!this.showQuery)
+            return;
+        return $ `
+      <p>Query snapshot</p>
+      <bc-datalog-editor
+        @bc-datalog-editor:update=${(e) => this._onUpdatedQuery(e)}
+      >
+      </bc-datalog-editor>
+    `;
+    }
+    renderQueryResult(result) {
+        if (result.Err) {
+            console.error(result.Err);
+            return $ `<p>error</p>`;
+        }
+        else {
+            return $ `<bc-authorizer-content .content=${result.Ok}>
+      </bc-authorizer-content>`;
+        }
+    }
+    render() {
+        if (!this._started)
+            return this.renderNotStarted();
+        const inspectQuery = {
+            data: this.snapshot,
+            extra_authorizer: this.authorizer != "" ? this.authorizer : undefined,
+            query: this.query != "" ? this.query : undefined,
+        };
+        const parseResult = inspect_snapshot(inspectQuery);
+        return $ ` <div class="row">${this.renderResult(parseResult)}</div> `;
+    }
+};
+BcSnapshotPrinter.styles = r$2 `
+    .row {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .public-key-input {
+      display: flex;
+    }
+
+    .public-key-input label {
+      height: 1.5em;
+    }
+
+    #public-key {
+      margin-left: 1em;
+      flex-grow: 1;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .row {
+        color: #dee2e6;
+        background: #131314;
+      }
+      textarea {
+        color: #dee2e6;
+        background: #131314;
+      }
+    }
+
+    @media (prefers-color-scheme: light) {
+      .row {
+        color: #1d2d35;
+        background: #fff;
+      }
+    }
+
+    @media (min-width: 576px) {
+      .row {
+        display: flex;
+        flex-flow: row wrap;
+        flex-direction: row;
+      }
+
+      .code {
+        order: 1;
+        width: 49%;
+      }
+
+      .content {
+        order: 2;
+        width: 49%;
+      }
+    }
+
+    code {
+      overflow-wrap: anywhere;
+      padding: 0.2em;
+      padding-top: 1em;
+    }
+
+    .code {
+      border: 1px rgba(128, 128, 128, 0.4) solid;
+      display: flex;
+      flex-direction: column;
+    }
+
+    textarea {
+      flex-grow: 1;
+      border: 0;
+    }
+
+    .content {
+      border-top: 1px rgba(128, 128, 128, 0.4) solid;
+      border-right: 1px rgba(128, 128, 128, 0.4) solid;
+    }
+
+    p {
+      border-bottom: 1px rgba(128, 128, 128, 0.4) solid;
+      margin-block-start: 0px;
+      margin-block-end: 0px;
+      padding: 0.2em;
+      font-size: 0.8em;
+    }
+
+    .revocation-id,
+    .external-key {
+      overflow: hidden;
+      diplay: inline-block;
+      text-overflow: ellipsis;
+      max-width: 100;
+    }
+
+    .revocation-id,
+    .external-key > .id {
+      user-select: all;
+    }
+
+    .content code {
+      user-select: all;
+    }
+
+    bc-datalog-editor {
+      border-bottom: 1px rgba(128, 128, 128, 0.4) solid;
+    }
+  `;
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "snapshot", void 0);
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "readonly", void 0);
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "showAuthorizer", void 0);
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "showQuery", void 0);
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "authorizer", void 0);
+__decorate([
+    e$2()
+], BcSnapshotPrinter.prototype, "query", void 0);
+__decorate([
+    t$1()
+], BcSnapshotPrinter.prototype, "_started", void 0);
+BcSnapshotPrinter = __decorate([
+    n$1("bc-snapshot-printer")
+], BcSnapshotPrinter);
 
 async function setup() {
   console.log("SETUP");
   await initialize();
-  console.log("DONE");
 }
 
 setup();

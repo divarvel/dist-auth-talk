@@ -1,5 +1,5 @@
 ---
-title: "Auth & systèmes distribués : ne jetons pas le bébé avec l’eau du bain"
+title: "Auth & systèmes distribués : ne jetons pas le bébé avec l’auth du bain"
 #display-notes: true
 #light: true
 #ratio43: true
@@ -224,7 +224,7 @@ properties
 ---
 
 
-# distributed trust
+# Distributed trust
 
 ::: notes
 | in this setup, there is no central auth system that you can query
@@ -233,7 +233,7 @@ properties
 
 ---
 
-# incomplete data
+# Incomplete data
 
 ::: notes
 | in this setup, a service may carry enough information to make
@@ -260,18 +260,6 @@ properties
 ::: notes
 | talking about token revocation could easily fill a 1h slot so we'll
 | have to summarize
-| have a basic revocation infra available from day 1, even if it's
-| dumb. You'll thank yourself once you have to revoke a token.
-| make sure every token is uniquely identifiable so it can be revoked
-| without affecting other holders.
-| if possible, keep a list of all the tokens you generate, so you can
-| revoke them (you might know that a token has leaked without having
-| access to the token itself). if tokens have unique ids, you can
-| store them instead of the tokens, this way it's not sensitive info
-| revocation and emission lists can only grow, so they need to be
-| pruned at some point. the simplest way to do that is to give every
-| token an expiration date, and then store this date in the emission
-| and revocation lists. this way, pruning is easy.
 :::
 
 ---
@@ -287,7 +275,7 @@ properties
 
 ---
 
-# unique tokens
+# Make tokens unique
 
 ::: notes
 | make sure every token is uniquely identifiable so it can be revoked
@@ -296,7 +284,7 @@ properties
 
 ---
 
-# track tokens
+# Track tokens
 
 ::: notes
 | if possible, keep a list of all the tokens you generate, so you can
@@ -307,7 +295,7 @@ properties
 
 ---
 
-# expiration date
+# Expiration date
 
 ::: notes
 | revocation and emission lists can only grow, so they need to be
@@ -369,7 +357,7 @@ properties
 
 ---
 
-# perform regular rotations
+# Perform regular rotations
 
 ::: notes
 | the best way to be prepared is to rotate keys regularly and make
@@ -394,7 +382,7 @@ properties
 
 ---
 
-# Dedicated execution roles
+# Dedicated execution roles (good)
 
 ::: notes
 | of course you want people to have access to what they need, so 
@@ -411,8 +399,6 @@ properties
 ::: notes
 | however, if you can deliver tokens crafted specially for the
 | operations you're trying to carry out, you avoid a lot of issues
-| it's not always feasible though, especially with central auth
-| systems where creating new roles takes time (eg AWS)
 :::
 
 ---
@@ -442,29 +428,50 @@ properties
 # Biscuit
 
 ::: incremental
-- public key crypto (ed25519)
-- offline attenuation
+- spec
+- implementations
 :::
 
-::: incremental
-- spec + implementations
+::: notes
+| biscuit is a spec (token format, datalog variant syntax & semantics)
+| there are various implementations, biscuit-rust is the reference implementation
+| several implementations are available (rust + wasm derivatives, haskell, java, go, etc)
 :::
 
+---
+
+# Biscuit spec
+
 ::: incremental
+- token format (payload serialization)
 - token format (crypto)
-- token format (payload)
-- authorization rules (semantics)
+- authorization rules (denotational & operational semantics)
 :::
 
 ::: notes
 | biscuit is a spec, it defines both a token format (crypto and payload), as
 | well as a dedicated language used to describe authorization rules.
-| several implementations are available (rust + wasm derivatives, haskell, java, go, etc)
+:::
+
+---
+
+# Biscuit
+
+::: incremental
+- public key crypto (default ed25519)  
+  (cryptographic agility WIP)
+- offline attenuation
+- authorization rules
+- snapshots
+:::
+
+::: notes
 | the token itself relies on ed25519 signatures, so it works with keypairs
 | a token contains an authority block, signed by the token emitter, but it can
-| also contain *attenuation blocks*, that can be *freely* added to a token
-| (ie without needing the signing key). such blocks can only restrict a token
-| scope
+| also contain attenuation blocks, that can be freely added to a token
+| (ie without needing the signing key). such blocks can only restrict a token scope
+| the token can contain both data and authorization logic
+| snapshots can persist the whole context for after-the-fact auditing
 :::
 
 ---
@@ -474,7 +481,29 @@ properties
 - init 2018 (offline attenuation & datalog)
 - v1 in 2019 (faster crypto & better datalog)
 - v2 2022 (boring-er crypto & scoping)
-- v3 2023 (third-party blocks)
+- v3 2023 (third-party blocks & snapshots)
+- v4 2024? (more datalog features)
+
+::: notes
+| created at clever-cloud, following a successful use of macaroons in a limited context
+| geoffroy, since left clever cloud, and clément joined biscuit,
+| after having gained significant operational experience with macaroons
+:::
+
+---
+
+# April 2023 -> April 2024
+
+- new documentation (<https://doc.biscuitsec.org>)
+- more tooling (VScode plugin, LSP)
+- CLI features (snapshots, queries, timing info, JSON output)
+- biscuit-python
+- biscuit-rust 4.0
+
+::: notes
+| special thanks to outscale for dedicating time to biscuit
+| (not only my time, but also some of my colleagues)
+:::
 
 ---
 
@@ -483,7 +512,7 @@ properties
 - rust (biscuit v3 ref implementation)
 - JS (biscuit v3, rust via WebAssembly)
 - Haskell (biscuit v3)
-- Java (biscuit v2)
+- Java (biscuit v2, v3 in progress)
 - Go (biscuit v2)
 - python (in progress)
 - .Net (in progress)
@@ -494,7 +523,7 @@ properties
 
 - CLI
 - web components
-- editor support (vscode, helix, tree-sitter)
+- editor support (vscode, helix, tree-sitter, lsp)
 
 ---
 
@@ -565,10 +594,6 @@ allow if user($user),
 </bc-datalog-editor>
 ```
 
-<!--
-<img src="./assets/biscuit-rules.png" style="max-width: 100%" />
--->
-
 ::: notes
 | the token itself can carry rules, but ultimately it's up to the receiving
 | agent to decide whether or not to authorize. That is done with `allow if`
@@ -593,16 +618,21 @@ check if source_ip("127.0.0.1");
 </bc-datalog-editor>
 ```
 
-<!--
-<img src="./assets/biscuit-check.png" style="max-width: 100%" />
--->
-
 ::: notes
 | the biscuit crypto model allows a token holder to craft a new token by
 | appending a block to an existing one. once added, blocks can not be removed,
 | altered or reordered. The evaluation model guarantees that a block can only
 | restrict a token's scope
 :::
+
+---
+
+# Biscuit: snapshots
+
+```{=html}
+<bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q3yYauwEIBBIFZmlsZTISBDEyMzQSBWZpbGUxIkQQAxoJCgcIChIDGIEIGg0KCwgEEgMYgggSAhgAKiYKJAoCCBsSBggFEgIIBRoWCgQKAggFCggKBiCAxZihBgoEGgIIACoQEAMaDAoKCAUSBiDbsZWhBjIVChEKAggbEgsIBBIDGIAIEgIYABAAOh4KAhAAEgkKBwgKEgMYgQgSDQoLCAQSAxiCCBICGAA6EgoCCgASDAoKCAUSBiDbsZWhBkAA" class="centered">
+</bc-snapshot-printer>  
+```
 
 ---
 
@@ -662,7 +692,7 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# challenges
+# Challenges
 
 ::: notes
 | quite common and convenient. not perfect though
@@ -670,7 +700,7 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# complexity @ ingress
+# Complexity @ ingress
 
 ::: notes
 | makes the ingress logic more complicated, so it can affect its
@@ -680,7 +710,7 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# coarse-grained model
+# Coarse-grained model
 
 ::: notes
 | does the
@@ -694,7 +724,7 @@ untrusted│t │                     ┌───┐     │   │
 
 ---
 
-# confused deputy attacks
+# Confused deputy attacks
 
 ::: notes
 | services can still be tricked into performing operations that
@@ -817,7 +847,7 @@ token     │w ├────────────────────�
 
 ---
 
-# out of the hot path
+# Out of the hot path
 
 ::: notes
 the auth service is called once and then services are accessed directly
@@ -825,7 +855,7 @@ the auth service is called once and then services are accessed directly
 
 ---
 
-# challenges
+# Challenges
 
 ::: notes
 | the only truly decentralized solution
@@ -833,7 +863,7 @@ the auth service is called once and then services are accessed directly
 
 ---
 
-# internals are more exposed
+# Internals are more exposed
 
 ::: notes
 | stuff that is usually hidden behind the gateway is now exposed, so it can
@@ -858,11 +888,10 @@ the auth service is called once and then services are accessed directly
 
 # Biscuit next steps<br><small>(contributors welcome)</small>
   
-- updated documentation
-- vscode support
-- biscuit-wasm
-- biscuit-java update
-- biscuit-python release
+- vscode support (LSP integration)
+- more powerful datalog features (laziness, nested structures)
+- ECDSA support
+- webauthn support
 
 ---
 
