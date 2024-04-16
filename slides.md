@@ -290,7 +290,7 @@ properties
 | without affecting other holders.
 :::
 
----
+<!-- ---
 
 # Make tokens unique
 
@@ -324,6 +324,8 @@ properties
 ---
 
 # [do it yesterday[]{.make-alternate}]{.jumbo}
+
+-->
 
 ---
 
@@ -372,7 +374,7 @@ properties
 | once you need it, you have to be fast.
 :::
 
----
+<!-- ---
 
 # Perform regular rotations
 
@@ -385,7 +387,7 @@ properties
 
 ---
 
-# [do it yesterday[]{.make-alternate}]{.jumbo}
+# [do it yesterday[]{.make-alternate}]{.jumbo} -->
 
 ---
 
@@ -552,7 +554,7 @@ properties
 
 ---
 
-# Biscuit: token
+<!-- # Biscuit: token
 
 ```{=html}
 <bc-datalog-editor>
@@ -699,6 +701,7 @@ allow if admin(true);
 <bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q3yYauwEIBBIFZmlsZTISBDEyMzQSBWZpbGUxIkQQAxoJCgcIChIDGIEIGg0KCwgEEgMYgggSAhgAKiYKJAoCCBsSBggFEgIIBRoWCgQKAggFCggKBiCAxZihBgoEGgIIACoQEAMaDAoKCAUSBiDbsZWhBjIVChEKAggbEgsIBBIDGIAIEgIYABAAOh4KAhAAEgkKBwgKEgMYgQgSDQoLCAQSAxiCCBICGAA6EgoCCgASDAoKCAUSBiDbsZWhBkAA" class="centered">
 </bc-snapshot-printer>  
 ```
+-->
 
 ---
 
