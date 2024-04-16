@@ -217,6 +217,23 @@ properties
 
 ---
 
+# Why biscuits?
+
+::: incremental
+- Public key cryptography
+- Offline attenuation
+- Structured logic language
+:::
+
+::: notes
+| Macaroons were deployed at clever cloud early on because we had a use-case for
+| offline attenuation, but their reliance on a shared secret prevented a wider-scale use
+| also the lack of structure for authorization logic required duplicated logic in
+| different tech stacks
+:::
+
+---
+
 :::bigimage
 ![](./assets/bearer-tokens.jpg)
 :::
@@ -233,7 +250,7 @@ properties
 
 ---
 
-# Incomplete data
+# Incomplete & Dynamic data
 
 ::: notes
 | in this setup, a service may carry enough information to make
@@ -561,6 +578,8 @@ check if time($time), $time < 2023-03-31T00:10:46Z;
 
 # Biscuit: token
 
+---
+
 ```{=html}
 <bc-token-generator privateKey="7acc936a92ceaeaefb1e21483877ba0b603f2b9bcdcf6422a19e9f488cc16a75">
 <code class="block">
@@ -575,6 +594,8 @@ check if time($time), $time < 2023-03-31T00:10:46Z;
 ---
 
 # Biscuit: auth rules
+
+---
 
 ```{=html}
 <bc-datalog-editor>
@@ -608,14 +629,39 @@ allow if user($user),
 
 # Biscuit: offline attenuation
 
+---
+
 ```{=html}
-<bc-datalog-editor>
-<code>
-// block appended by the token holder: the resulting
-// token can only be used locally
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+admin(true);
+</code></pre>
+<pre><code class="authorizer">
+allow if admin(true);
+</code></pre>
+</bc-datalog-playground>
+```
+
+::: notes
+| here we have a token granting admin rights to its holder
+| (as defined in the authorizer block)
+| the request is authorized
+:::
+
+---
+
+```{=html}
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+admin(true);
+</code></pre>
+<pre><code class="block">
 check if source_ip("127.0.0.1");
-</code>
-</bc-datalog-editor>
+</code></pre>
+<pre><code class="authorizer">
+allow if admin(true);
+</code></pre>
+</bc-datalog-playground>
 ```
 
 ::: notes
@@ -623,11 +669,31 @@ check if source_ip("127.0.0.1");
 | appending a block to an existing one. once added, blocks can not be removed,
 | altered or reordered. The evaluation model guarantees that a block can only
 | restrict a token's scope
+| here the token can only be used with a local IP address
 :::
 
 ---
 
+```{=html}
+<bc-datalog-playground showBlocks="true">
+<pre><code class="block">
+admin(true);
+</code></pre>
+<pre><code class="block">
+check if source_ip("127.0.0.1");
+</code></pre>
+<pre><code class="authorizer">
+source_ip("127.0.0.1");
+allow if admin(true);
+</code></pre>
+</bc-datalog-playground>
+```
+
+---
+
 # Biscuit: snapshots
+
+---
 
 ```{=html}
 <bc-snapshot-printer snapshot="CgkI6AcQZBjAhD0Q3yYauwEIBBIFZmlsZTISBDEyMzQSBWZpbGUxIkQQAxoJCgcIChIDGIEIGg0KCwgEEgMYgggSAhgAKiYKJAoCCBsSBggFEgIIBRoWCgQKAggFCggKBiCAxZihBgoEGgIIACoQEAMaDAoKCAUSBiDbsZWhBjIVChEKAggbEgsIBBIDGIAIEgIYABAAOh4KAhAAEgkKBwgKEgMYgQgSDQoLCAQSAxiCCBICGAA6EgoCCgASDAoKCAUSBiDbsZWhBkAA" class="centered">
