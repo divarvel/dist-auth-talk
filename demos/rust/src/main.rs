@@ -58,8 +58,8 @@ pub struct GetQuery {
 
 fn get_pictures(dog: Doggo) -> Result<Vec<u8>, std::io::Error> {
     let dir_path = match dog {
-        Doggo::Puna => "images/puna",
-        Doggo::Nix => "images/nix",
+        Doggo::Puna => "assets/images/puna",
+        Doggo::Nix => "assets/images/nix",
     };
 
     let entries: Vec<Result<DirEntry, _>> = std::fs::read_dir(dir_path)?.collect();
