@@ -34,11 +34,27 @@ body {
 
 #pic {
   margin: auto;
+  position: relative;
 }
 
 #pic img {
   max-height: 100vh;
   object-fit: contain;
+}
+
+#pic img.error {
+  border: 10px solid red;
+}
+
+#pic img.error + p {
+  position: absolute;
+  top: 235px;
+  left: 100px;
+  color: red;
+  background-color: yellow;
+  font-size: 100px;
+  font-weight: bold;
+  rotate: 45deg;
 }
 </style>
 </head>

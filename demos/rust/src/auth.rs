@@ -121,7 +121,7 @@ fn parse_token(request: &Request, public_key: PublicKey) -> Result<Biscuit, Auth
 }
 
 pub const ERROR_BODY: Html<&'static str> =
-    Html(r#"<img src="/assets/poutou.webp" style="border: 10px solid red;">"#);
+    Html(r#"<img src="/assets/poutou.webp" class="error"><p>Forbidden</p>"#);
 
 pub fn run_auth(biscuit: &Biscuit, mut authorizer: Authorizer) -> Result<(), Html<&'static str>> {
     authorizer.add_token(biscuit).map_err(|_| ERROR_BODY)?;
