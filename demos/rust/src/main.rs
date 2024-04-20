@@ -4,13 +4,12 @@ mod auth;
 
 use base64::Engine;
 use biscuit_auth::{builder::ToAnyParam, macros::authorizer, Biscuit, PublicKey};
-use http::StatusCode;
 use rand::Rng;
 use serde::Deserialize;
-use std::{env, fmt::Display, fs::DirEntry};
+use std::{env, fmt::Display, fs::DirEntry, time::SystemTime};
 use tower_http::services::{ServeDir, ServeFile};
 
-use auth::{run_auth, ParseBiscuit, ERROR_BODY};
+use auth::{error_body, run_auth, ParseBiscuit};
 
 #[tokio::main]
 async fn main() {
@@ -77,22 +76,26 @@ fn get_pictures(dog: Doggo) -> Result<Vec<u8>, std::io::Error> {
 async fn dog_handler(
     Extension(biscuit): Extension<Biscuit>,
     Query(query): Query<GetQuery>,
-) -> Result<Html<String>, Html<&'static str>> {
-    run_auth(
+) -> Result<Html<String>, Html<String>> {
+    let snapshot = run_auth(
         &biscuit,
         authorizer!(
             r#"
     dog({dog});
+    time({now});
+    allow if user("clementd");
     allow if right({dog}, "read");
         "#,
+            now = SystemTime::now(),
             dog = query.dog
         ),
     )?;
 
-    let bytes = get_pictures(query.dog).map_err(|_| ERROR_BODY)?;
+    let bytes = get_pictures(query.dog).map_err(|_| error_body(&snapshot))?;
 
     Ok(Html(format!(
-        r#"<img src="data:image/jpeg;base64,{}">"#,
+        r#"<img src="data:image/jpeg;base64,{}">
+        <code><pre>{snapshot}</pre><code>"#,
         base64::prelude::BASE64_STANDARD.encode(bytes)
     )))
 }

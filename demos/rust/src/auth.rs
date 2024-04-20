@@ -120,28 +120,34 @@ fn parse_token(request: &Request, public_key: PublicKey) -> Result<Biscuit, Auth
     Biscuit::from_base64(token_string, public_key).map_err(AuthError::BiscuitError)
 }
 
-pub const ERROR_BODY: Html<&'static str> =
-    Html(r#"<img src="/assets/poutou.webp" class="error"><p>Forbidden</p>"#);
+pub fn error_body(snapshot: &str) -> Html<String> {
+    Html(format!(
+        r#"
+        <img src="/assets/poutou.webp" class="error"><p>Forbidden</p>
+        <code><pre>{snapshot}</pre></code>
+        "#
+    ))
+}
 
-pub fn run_auth(biscuit: &Biscuit, mut authorizer: Authorizer) -> Result<(), Html<&'static str>> {
-    authorizer.add_token(biscuit).map_err(|_| ERROR_BODY)?;
+pub fn run_auth(biscuit: &Biscuit, mut authorizer: Authorizer) -> Result<String, Html<String>> {
+    authorizer
+        .add_token(biscuit)
+        .map_err(|_| error_body("No snapshot available"))?;
     let result = authorizer.authorize();
-    println!(
-        "{}",
-        authorizer.to_base64_snapshot().map_err(|e| {
-            println!("Snapshot error: {e}");
-            ERROR_BODY
-        })?
-    );
+    let snapshot = authorizer.to_base64_snapshot().map_err(|e| {
+        println!("Snapshot error: {e}");
+        error_body("No snapshot available")
+    })?;
+    println!("{snapshot}");
 
     match result {
         Ok(policy_id) => {
             println!("Auth success, policy n°{policy_id}");
-            Ok(())
+            Ok(snapshot)
         }
         Err(e) => {
             println!("Auth error, {e}");
-            Err(ERROR_BODY)
+            Err(error_body(&snapshot))
         }
     }
 }
