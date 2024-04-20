@@ -22,3 +22,6 @@ slides.html: slides.md template.html
 clean:
 	-rm slides.html
 	-rm slides-light.html
+
+serve:
+	-python3 -m http.server
