@@ -83,7 +83,8 @@ async fn dog_handler(
             r#"
     dog({dog});
     time({now});
-    allow if user("clementd");
+    right("puna", "read") <- user("clementd");
+    right("nix", "read") <- user("gcouprie");
     allow if right({dog}, "read");
         "#,
             now = SystemTime::now(),
