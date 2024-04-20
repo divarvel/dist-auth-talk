@@ -705,6 +705,12 @@ allow if admin(true);
 
 ---
 
+:::bigimage
+![](./assets/bonaldi.avif)
+:::
+
+---
+
 # Demo
 
 <https://github.com/divarvel/dist-auth-talk/tree/main/demos>
