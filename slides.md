@@ -914,7 +914,7 @@ token     │w ├────────────────────�
 | and it was super robust.
 :::
 
----
+<!-- ---
 
 # Out of the hot path
 
@@ -938,6 +938,7 @@ the auth service is called once and then services are accessed directly
 | stuff that is usually hidden behind the gateway is now exposed, so it can
 | be more brittle, and there is a bigger attack surface
 :::
+-->
 
 ---
 
