@@ -19,6 +19,7 @@ author:
 # What is auth?
 
 ::: notes
+| clementd
 | overloaded term. gathers two concepts
 :::
 
@@ -29,6 +30,10 @@ author:
   <div style="flex-grow: 1; text-align: center;"><h2>Authorization</h2></div>
 </div>
 
+::: notes
+| clementd
+:::
+
 ---
 
 <div style="display: flex;">
@@ -37,6 +42,7 @@ author:
 </div>
 
 ::: notes
+| clementd
 | authentication: who are you?
 | authorization: what can you do?
 | usually authentication is used to determine authorization, but
@@ -48,6 +54,7 @@ author:
 # Distributed systems
 
 ::: notes
+| clementd
 | a distributed system is about running different bits of software
 | on different pieces of hardware.
 :::
@@ -58,11 +65,17 @@ author:
 ![](./assets/but-why.gif)
 :::
 
+
+::: notes
+| clementd
+:::
+
 ---
 
 # [compartimentalize]{.jumbo}
 
 ::: notes
+| clementd
 | The goal is to create boundaries
 | to compartimentalize stuff (hardware failures, resource use,
 | teams management, blast radius of a bug / vuln)
@@ -73,6 +86,7 @@ author:
 # Tradeoffs
 
 ::: notes
+| geoffroy
 | after a few years of μservices being trendy, we're starting to know tradeoffs
 | well.
 :::
@@ -82,6 +96,7 @@ author:
 # Latency
 
 ::: notes
+| geoffroy
 | in the context of auth, the biggest tradeoff is latency in data updates. you
 | usually want a single source of truth with auth, and in a distributed system
 | you don't have a single data store, so propagation takes time
@@ -92,6 +107,7 @@ author:
 # Monolith, [[fewer problems]{}]{.incremental}
 
 ::: notes
+| geoffroy
 | in terms of solely auth, a monolith is unequivocally better. centralized
 | auth is simpler
 :::
@@ -103,6 +119,7 @@ author:
 :::
 
 ::: notes
+| geoffroy
 | if you can afford a monolith (tolerate hardware failure,
 | team coupling, etc), then all sorts of problems disappear
 :::
@@ -112,6 +129,7 @@ author:
 # kthxbai
 
 ::: notes
+| clementd
 | for the rest of the talk we will assume that we are in the context
 | where a distributed system is required (for whatever reason)
 :::
@@ -121,6 +139,7 @@ author:
 # Auth in a distributed system
 
 ::: notes
+| geoffroy
 | authorization is a cross-cutting concern. in most cases each entity
 | will have to perform authorization on incoming requests.
 | it's also often something that you somehow want to manage centrally.
@@ -131,6 +150,11 @@ author:
 
 # [Don't panic]{.jumbo}
 
+
+::: notes
+| geoffroy
+:::
+
 ---
 
 :::bigimage
@@ -139,6 +163,7 @@ author:
 
 
 ::: notes
+| geffroy
 | the good thing is that you can choose where you apply decentralization
 | what's important is staying aware of the dependencies between services
 | and the actual call graph triggered by an incoming request. it will
@@ -155,6 +180,7 @@ author:
 :::
 
 ::: notes
+| geoffroy
 | you can still keep auth completely centralized in a distributed system
 | every node calls out to the auth service.
 | conceptually simple, but the auth service is a SPOF
@@ -174,18 +200,10 @@ author:
 :::
 
 ::: notes
+| geoffroy
 | if you want truly autonomous nodes and an auth service spof is
 | not possible, then each service decides on its own.
 | but how?
-:::
-
----
-
-# challenges
-
-::: notes
-more frightening than centralized auth, even though it brings super interesting
-properties
 :::
 
 ---
@@ -197,6 +215,7 @@ properties
 - Roll your own tokens
 
 ::: notes
+| clementd
 | Since services cannot call out to a central auth service, services need a way
 | to trust information. A common way to do that is signed tokens
 | JWT / PASETO / custom tokens: payload + signature. It's up to the services
@@ -211,8 +230,19 @@ properties
 - Biscuits
 
 ::: notes
+| geoffroy
 | Macaroons: caveat system for describing constraints
 | Biscuits: embedded logic language for describing constraints & access rules
+:::
+
+---
+
+:::bigimage
+![](./assets/bearer-tokens.jpg)
+:::
+
+::: notes
+| geoffroy
 :::
 
 ---
@@ -226,6 +256,7 @@ properties
 :::
 
 ::: notes
+| geoffroy
 | Macaroons were deployed at clever cloud early on because we had a use-case for
 | offline attenuation, but their reliance on a shared secret prevented a wider-scale use
 | also the lack of structure for authorization logic required duplicated logic in
@@ -234,16 +265,20 @@ properties
 
 ---
 
-:::bigimage
-![](./assets/bearer-tokens.jpg)
+# challenges
+
+::: notes
+| geoffroy
+| more frightening than centralized auth, even though it brings super interesting
+properties
 :::
 
 ---
 
-
 # Distributed trust
 
 ::: notes
+| geoffroy
 | in this setup, there is no central auth system that you can query
 | for fresh information. you have to rely on bearer tokens
 :::
@@ -253,6 +288,7 @@ properties
 # Incomplete & Dynamic data
 
 ::: notes
+| geoffroy
 | in this setup, a service may carry enough information to make
 | auth decisions, so sometimes a cache of external context is required
 | this cache can become stale
@@ -264,6 +300,7 @@ properties
 # Mitigating issues
 
 ::: notes
+| clementd
 | the main issue with distributed auth and bearer tokens is that once
 | a token has been created, there is no direct way to invalidate it.
 | the only way you can do it is to tell everyone "stop accepting this
@@ -275,6 +312,7 @@ properties
 # [revocation]{.jumbo}
 
 ::: notes
+| clementd
 | talking about token revocation could easily fill a 1h slot so we'll
 | have to summarize
 :::
@@ -284,6 +322,7 @@ properties
 # [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ::: notes
+| clementd
 | have a basic revocation infra available from day 1, even if it's
 | dumb. You'll thank yourself once you have to revoke a token.
 | make sure every token is uniquely identifiable so it can be revoked
@@ -347,6 +386,7 @@ properties
 </pre>
 
 ::: notes
+| clementd
 | a good way to reduce tokens lifetime is to separate access tokens
 | from refresh tokens. access tokens are bearer tokens with a
 | predefinite validity period. refresh tokens are stateful and can
@@ -362,6 +402,7 @@ properties
 # Key rotation
 
 ::: notes
+| clementd
 | change keys regularly, accept both old and new keys during a limited period
 :::
 
@@ -370,6 +411,7 @@ properties
 # [do it yesterday[]{.make-alternate}]{.jumbo}
 
 ::: notes
+| clementd
 | same as for revocation, this has to be planned from day 1 because
 | once you need it, you have to be fast.
 :::
@@ -395,6 +437,7 @@ properties
 # Principle of least privilege
 
 ::: notes
+| geoffroy
 | even with revocation in place, there is still latency. so reducing
 | the blast radius during that vuln window is always a good thing.
 :::
@@ -404,6 +447,7 @@ properties
 # Dedicated execution roles (good)
 
 ::: notes
+| clementd
 | of course you want people to have access to what they need, so 
 | identity-based rules tend to be static.
 | a good example is AWS execution roles you can define for lambdas
@@ -416,6 +460,7 @@ properties
 # Single purpose tokens on demand (better)
 
 ::: notes
+| clementd
 | however, if you can deliver tokens crafted specially for the
 | operations you're trying to carry out, you avoid a lot of issues
 :::
@@ -425,6 +470,7 @@ properties
 # Perf / latency tradeoff
 
 ::: notes
+| clementd
 | it's not always feasible though, especially with central auth
 | systems where creating new roles takes time (eg AWS)
 | KMS has a dedicated feature, just for that: creating restricted access tokens
@@ -436,6 +482,7 @@ properties
 # [✨offline attenuation ✨]{.jumbo}
 
 ::: notes
+| clementd
 | what if you could generate single-use token on demand, in a hot path, with
 | no perf cost?
 |
@@ -452,6 +499,7 @@ properties
 :::
 
 ::: notes
+| geoffroy
 | biscuit is a spec (token format, datalog variant syntax & semantics)
 | there are various implementations, biscuit-rust is the reference implementation
 | several implementations are available (rust + wasm derivatives, haskell, java, go, etc)
@@ -468,6 +516,7 @@ properties
 :::
 
 ::: notes
+| geoffroy
 | biscuit is a spec, it defines both a token format (crypto and payload), as
 | well as a dedicated language used to describe authorization rules.
 :::
@@ -485,6 +534,7 @@ properties
 :::
 
 ::: notes
+| geoffroy
 | the token itself relies on ed25519 signatures, so it works with keypairs
 | a token contains an authority block, signed by the token emitter, but it can
 | also contain attenuation blocks, that can be freely added to a token
@@ -504,6 +554,7 @@ properties
 - v4 2024? (more datalog features)
 
 ::: notes
+| geoffroy
 | created at clever-cloud, following a successful use of macaroons in a limited context
 | geoffroy, since left clever cloud, and clément joined biscuit,
 | after having gained significant operational experience with macaroons
@@ -520,6 +571,7 @@ properties
 - biscuit-rust 4.0
 
 ::: notes
+| clementd
 | special thanks to outscale for dedicating time to biscuit
 | (not only my time, but also some of my colleagues)
 :::
@@ -533,8 +585,13 @@ properties
 - Haskell (biscuit v3)
 - Java (biscuit v2, v3 in progress)
 - Go (biscuit v2)
-- python (in progress)
+- python (biscuit v3, via biscuit-rust)
+- Zig (in progress)
 - .Net (in progress)
+
+::: notes
+| clementd
+:::
 
 ---
 
@@ -544,6 +601,10 @@ properties
 - web components
 - editor support (vscode, helix, tree-sitter, lsp)
 
+::: notes
+| clementd
+:::
+
 ---
 
 # Used in prod
@@ -551,6 +612,10 @@ properties
 - Clever Cloud
 - SpaceAndTime
 - nixbuild.net
+
+::: notes
+| geoffroy
+:::
 
 ---
 
@@ -709,11 +774,19 @@ allow if admin(true);
 ![](./assets/bonaldi.avif)
 :::
 
+::: notes
+| clementd
+:::
+
 ---
 
 # Demo
 
-<https://github.com/divarvel/dist-auth-talk/tree/main/demos>
+<https://github.com/divarvel/dist-auth-talk/tree/main/demos/rust>
+
+::: notes
+| clementd
+:::
 
 ---
 
@@ -724,6 +797,10 @@ allow if admin(true);
 | distributed auth. often you'll still require a bit of
 | centralization. the question is how / where you do that and
 | how much it affects other services
+:::
+
+::: notes
+| geoffroy
 :::
 
 ---
@@ -754,6 +831,7 @@ untrusted│t │                     ┌───┐     │   │
 </pre>
 
 ::: notes
+| geoffroy
 | you usually already have an ingress where all incoming traffic
 | is directed. so if you already have a spof, you can make it
 | handle auth concerns without creating a new one.
@@ -770,14 +848,16 @@ untrusted│t │                     ┌───┐     │   │
 # Challenges
 
 ::: notes
+| geoffroy
 | quite common and convenient. not perfect though
 :::
 
 ---
 
-# Complexity @ ingress
+<!-- # Complexity @ ingress
 
 ::: notes
+| geoffroy
 | makes the ingress logic more complicated, so it can affect its
 | robustness.
 | just half the story: how are internal calls authorized?
@@ -788,6 +868,7 @@ untrusted│t │                     ┌───┐     │   │
 # Coarse-grained model
 
 ::: notes
+| geoffroy
 | does the
 | gateway need to know about every service internals so it can
 | perform authorization. in practice this nudges into very coarse
@@ -797,11 +878,13 @@ untrusted│t │                     ┌───┐     │   │
 | services themselves perform authorization
 :::
 
----
+--- 
+-->
 
 # Confused deputy attacks
 
 ::: notes
+| geoffroy
 | services can still be tricked into performing operations that
 | they can do in theory but should be forbidden in a given
 | context.
@@ -830,6 +913,7 @@ request          │ 1  ├────▼┐
 </pre>
 
 ::: notes
+| geoffroy
 | the first service requires a token provided by the auth gateway
 | and then passes it to subsequent calls. each service uses this
 | token to perform auth.
@@ -857,6 +941,7 @@ request          │ 1  ├──┤magic│
 </pre>
 
 ::: notes
+| geoffroy
 | same as before, but each service attenuates the token before
 | passing it further. this way, even if a service is compromised,
 | only dedicated tokens are leaked, so the blast radius is limited
@@ -890,6 +975,10 @@ token     │w ├────────────────────�
                 inject rights
 </pre>
 
+::: notes
+| geoffroy
+:::
+
 ---
 
 # Token delivery service
@@ -914,6 +1003,7 @@ token     │w ├────────────────────�
 </pre>
 
 ::: notes
+| clementd
 | this one is interesting if you can directly expose services
 | the user logs in at the token service, and gets access tokens
 | they can use to access services directly. i used it at fretlink
@@ -960,6 +1050,10 @@ the auth service is called once and then services are accessed directly
 - Eat biscuits
 :::
 
+::: notes
+| clementd
+:::
+
 ---
 
 # Biscuit next steps<br><small>(contributors welcome)</small>
@@ -969,6 +1063,10 @@ the auth service is called once and then services are accessed directly
 - ECDSA support
 - webauthn support
 
+::: notes
+| clementd
+:::
+
 ---
 
 <div style="height: 100vh; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
@@ -977,3 +1075,8 @@ the auth service is called once and then services are accessed directly
 ## [github.com/biscuit-auth](https://github.com/biscuit-auth)
 ## [#biscuit-auth:matrix.org](https://matrix.to/#/#biscuit-auth:matrix.org)
 </div>
+
+::: notes
+| geoffroy
+:::
+
