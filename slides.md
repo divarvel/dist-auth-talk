@@ -611,6 +611,7 @@ properties
 
 - Clever Cloud
 - SpaceAndTime
+- Hashicorp
 - nixbuild.net
 
 ::: notes
