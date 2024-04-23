@@ -94,6 +94,7 @@ enum AuthError {
     BiscuitError(error::Token),
 }
 
+#[allow(dead_code)]
 fn extract_token_from_headers(request: &Request) -> Result<String, AuthError> {
     Ok(request
         .headers()
