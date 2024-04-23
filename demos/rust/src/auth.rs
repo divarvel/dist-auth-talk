@@ -123,7 +123,7 @@ fn parse_token(request: &Request, public_key: PublicKey) -> Result<Biscuit, Auth
 pub fn error_body(snapshot: &str) -> Html<String> {
     Html(format!(
         r#"
-        <img src="/assets/poutou.webp" class="error"><p>Forbidden</p>
+        <img src="/assets/poutou.jpg" class="error">
         <code><pre>{snapshot}</pre></code>
         "#
     ))
