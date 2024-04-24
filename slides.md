@@ -275,16 +275,6 @@ properties
 
 ---
 
-# Distributed trust
-
-::: notes
-| geoffroy
-| in this setup, there is no central auth system that you can query
-| for fresh information. you have to rely on bearer tokens
-:::
-
----
-
 # Incomplete & Dynamic data
 
 ::: notes
@@ -853,9 +843,11 @@ untrusted│t │                     ┌───┐     │   │
 | quite common and convenient. not perfect though
 :::
 
+<!--
+
 ---
 
-<!-- # Complexity @ ingress
+# Complexity @ ingress
 
 ::: notes
 | geoffroy
