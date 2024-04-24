@@ -599,7 +599,7 @@ properties
 
 # Used in prod
 
-- ~Hashicorp~ IBM
+- ~~Hashicorp~~ IBM
 - Clever Cloud
 - nixbuild.net
 - SpaceAndTime
