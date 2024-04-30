@@ -84,7 +84,7 @@ async fn dog_handler(
     dog({dog});
     time({now});
     right("puna", "read") <- user("clementd");
-    right("nix", "read") <- user("gcouprie");
+    right("nix", "read") <- user($u), ["gcouprie", "coupritus"].contains($u);
     allow if right({dog}, "read");
         "#,
             now = SystemTime::now(),

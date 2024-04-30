@@ -1,5 +1,5 @@
 ---
-title: "Auth & systèmes distribués : ne jetons pas le bébé avec l’auth du bain"
+title: "Auth & systèmes distribués : ne _jetons_ pas le bébé avec l’auth du bain"
 #display-notes: true
 #light: true
 #ratio43: true
@@ -608,9 +608,11 @@ properties
 | geoffroy
 :::
 
+<!--
+
 ---
 
-<!-- # Biscuit: token
+# Biscuit: token
 
 ```{=html}
 <bc-datalog-editor>
